@@ -140,11 +140,71 @@
                         </div>
 
                         <div class="menu-item">
+                            <a class="menu-link {{if eq .active "appointments"}}active{{end}}" href="/appointments">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-calendar fs-2"></i>
+                                </span>
+                                <span class="menu-title">Randevular</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "invoices"}}active{{end}}" href="/invoices">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-document fs-2"></i>
+                                </span>
+                                <span class="menu-title">Faturalar</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
                             <a class="menu-link {{if eq .active "accounting"}}active{{end}}" href="/accounting">
                                 <span class="menu-icon">
                                     <i class="ki-outline ki-chart-line fs-2"></i>
                                 </span>
                                 <span class="menu-title">Muhasebe</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "reports"}}active{{end}}" href="/reports">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-chart-simple fs-2"></i>
+                                </span>
+                                <span class="menu-title">Raporlar</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "notifications"}}active{{end}}" href="/notifications">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-notification fs-2"></i>
+                                </span>
+                                <span class="menu-title">Bildirimler</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item pt-5">
+                            <div class="menu-content">
+                                <div class="separator mx-1 my-4"></div>
+                            </div>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "profile"}}active{{end}}" href="/profile">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-user fs-2"></i>
+                                </span>
+                                <span class="menu-title">Profil</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "settings"}}active{{end}}" href="/settings">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-setting-2 fs-2"></i>
+                                </span>
+                                <span class="menu-title">Ayarlar</span>
                             </a>
                         </div>
 
@@ -351,7 +411,7 @@
                                         <div class="d-flex align-items-center mb-6">
                                             <span class="me-2 text-gray-600 fs-6 fw-bold">Muhasebe raporlarını görüntüle</span>
                                         </div>
-                                        <a href="/accounting" class="btn btn-primary w-100 py-3">Raporları Gör</a>
+                                        <a href="/reports" class="btn btn-primary w-100 py-3">Raporları Gör</a>
                                     </div>
                                 </div>
                             </div>

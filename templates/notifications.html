@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <base href="../" />
+    <title>{{.title}}</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="Esnaf ve İşletme Yönetim Sistemi" />
+    <meta name="keywords" content="esnaf, işletme, yönetim, muhasebe, müşteri, sipariş, bildirimler, hatırlatmalar" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:locale" content="tr_TR" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Esnaf Yönetim Sistemi" />
+    <meta property="og:site_name" content="Esnaf Yönetim" />
+    <link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <style>
+        @media (max-width: 991.98px) {
+            .app-sidebar {
+                position: fixed;
+                z-index: 105;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .app-sidebar-open .app-sidebar {
+                transform: translateX(0);
+            }
+            .app-wrapper {
+                margin-left: 0 !important;
+            }
+            #kt_app_sidebar_toggle {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+
+<body id="kt_app_body" data-kt-app-header-fixed="true" data-kt-app-header-fixed-mobile="true" 
+      data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" 
+      data-kt-app-sidebar-hoverable="true" data-kt-app-sidebar-push-toolbar="true" 
+      data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true" 
+      class="app-default">
+
+<div class="d-flex flex-column flex-root app-root" id="kt_app_root">
+    <div class="app-page flex-column flex-column-fluid" id="kt_app_page">
+        
+        <!-- Header -->
+        <div id="kt_app_header" class="app-header d-flex flex-column flex-stack">
+            <div class="d-flex flex-stack flex-grow-1">
+                <div class="app-navbar flex-grow-1 justify-content-between" id="kt_app_header_navbar">
+                    <!-- Mobile sidebar toggle -->
+                    <div class="d-flex d-lg-none">
+                        <button class="btn btn-icon btn-active-color-primary" id="kt_app_sidebar_toggle">
+                            <i class="ki-outline ki-burger-menu fs-2x"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Search -->
+                    <div class="app-navbar-item d-flex align-items-stretch flex-lg-grow-1">
+                        <div id="kt_header_search" class="header-search d-flex align-items-center w-lg-350px">
+                            <form class="d-none d-lg-block w-100 position-relative mb-5 mb-lg-0" autocomplete="off">
+                                <input type="hidden" />
+                                <i class="ki-outline ki-magnifier search-icon fs-2 text-gray-500 position-absolute top-50 translate-middle-y ms-5"></i>
+                                <input type="text" class="search-input form-control form-control border h-lg-45px ps-13" 
+                                       name="search" value="" placeholder="Bildirim Ara..." />
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- User Menu -->
+                    <div class="app-navbar-item ms-2 ms-lg-6" id="kt_header_user_menu_toggle">
+                        <div class="cursor-pointer symbol symbol-circle symbol-30px symbol-lg-45px">
+                            <img src="assets/media/avatars/300-2.jpg" alt="user" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div id="kt_app_sidebar" class="app-sidebar flex-column" data-kt-drawer="true" 
+             data-kt-drawer-name="app-sidebar" data-kt-drawer-activate="{default: true, lg: false}" 
+             data-kt-drawer-overlay="true" data-kt-drawer-width="250px" 
+             data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_app_sidebar_toggle">
+            
+            <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
+                <a href="/">
+                    <img alt="Logo" src="assets/media/logos/default-dark.svg" class="h-25px app-sidebar-logo-default" />
+                    <img alt="Logo" src="assets/media/logos/default-small.svg" class="h-20px app-sidebar-logo-minimize" />
+                </a>
+                <div id="kt_app_sidebar_toggle_mobile" class="app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary d-lg-none" data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="app-sidebar-minimize">
+                    <i class="ki-outline ki-double-left fs-2"></i>
+                </div>
+            </div>
+
+            <div class="app-sidebar-menu overflow-hidden flex-column-fluid">
+                <div id="kt_app_sidebar_menu_wrapper" class="app-sidebar-wrapper hover-scroll-overlay-y my-5" 
+                     data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-height="auto">
+                    
+                    <div class="menu menu-column menu-rounded menu-sub-indention px-3" id="#kt_app_sidebar_menu">
+                        
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "dashboard"}}active{{end}}" href="/dashboard">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-element-11 fs-2"></i>
+                                </span>
+                                <span class="menu-title">Dashboard</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "customers"}}active{{end}}" href="/customers">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-profile-circle fs-2"></i>
+                                </span>
+                                <span class="menu-title">Müşteriler</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "products"}}active{{end}}" href="/products">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-box fs-2"></i>
+                                </span>
+                                <span class="menu-title">Ürünler/Hizmetler</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "orders"}}active{{end}}" href="/orders">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-basket fs-2"></i>
+                                </span>
+                                <span class="menu-title">Siparişler</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "accounting"}}active{{end}}" href="/accounting">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-chart-line fs-2"></i>
+                                </span>
+                                <span class="menu-title">Muhasebe</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "appointments"}}active{{end}}" href="/appointments">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-calendar fs-2"></i>
+                                </span>
+                                <span class="menu-title">Randevular</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "notifications"}}active{{end}}" href="/notifications">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-notification-status fs-2"></i>
+                                </span>
+                                <span class="menu-title">Bildirimler</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "settings"}}active{{end}}" href="/settings">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-setting-2 fs-2"></i>
+                                </span>
+                                <span class="menu-title">Ayarlar</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
+            <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+                <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+                    <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                        <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
+                            Bildirimler ve Hatırlatmalar
+                        </h1>
+                        <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                            <li class="breadcrumb-item text-muted">
+                                <a href="/" class="text-muted text-hover-primary">Ana Sayfa</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                            </li>
+                            <li class="breadcrumb-item text-muted">Bildirimler</li>
+                        </ul>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 gap-lg-3">
+                        <button type="button" class="btn btn-sm btn-primary" id="mark_all_read">
+                            <i class="ki-outline ki-check-circle fs-2"></i>Tümünü Okundu İşaretle
+                        </button>
+                        <div class="m-0">
+                            <a href="#" class="btn btn-sm btn-flex btn-light fw-bold" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                <i class="ki-outline ki-filter fs-6 text-muted me-1"></i>Filtrele
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="kt_app_content" class="app-content flex-column-fluid">
+                <div id="kt_app_content_container" class="app-container container-fluid">
+                    
+                    <!-- Bildirim Kategorileri -->
+                    <div class="d-flex flex-wrap flex-stack mb-6">
+                        <h3 class="fw-bold my-2">Bildirimler
+                            <span class="fs-6 text-gray-500 fw-semibold ms-1">{{len .notifications}}</span>
+                        </h3>
+                        <div class="d-flex my-2">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-light-primary active" data-filter="all">Tümü</button>
+                                <button type="button" class="btn btn-light-primary" data-filter="stock">Stok Uyarıları</button>
+                                <button type="button" class="btn btn-light-primary" data-filter="appointment">Randevular</button>
+                                <button type="button" class="btn btn-light-primary" data-filter="system">Sistem</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bildirimler Listesi -->
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="kt_list_widget_10_tab_1">
+                            <!-- Bildirim Listesi -->
+                            <div class="card card-flush">
+                                <div class="card-body pt-0">
+                                    {{if .notifications}}
+                                        {{range .notifications}}
+                                        <div class="d-flex flex-stack item-border-hover px-3 py-5 notification-item {{.Type}}" data-type="{{.Type}}">
+                                            <!-- İkon ve Bildirim Metni -->
+                                            <div class="d-flex align-items-center">
+                                                <!-- İkon -->
+                                                <div class="symbol symbol-40px symbol-circle me-4">
+                                                    {{if eq .Type "stock"}}
+                                                    <span class="symbol-label bg-light-warning">
+                                                        <i class="ki-outline ki-abstract-26 fs-2 text-warning"></i>
+                                                    </span>
+                                                    {{else if eq .Type "appointment"}}
+                                                    <span class="symbol-label bg-light-primary">
+                                                        <i class="ki-outline ki-calendar-tick fs-2 text-primary"></i>
+                                                    </span>
+                                                    {{else}}
+                                                    <span class="symbol-label bg-light-info">
+                                                        <i class="ki-outline ki-notification-status fs-2 text-info"></i>
+                                                    </span>
+                                                    {{end}}
+                                                </div>
+                                                <!-- Bildirim İçeriği -->
+                                                <div class="ps-1">
+                                                    <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">{{.Title}}</a>
+                                                    <div class="text-gray-500 fs-7">{{.Message}}</div>
+                                                </div>
+                                            </div>
+                                            <!-- Tarih ve İşlemler -->
+                                            <div class="d-flex flex-column align-items-end">
+                                                <span class="text-gray-500 fs-7">{{.CreatedAt.Format "02 Jan 2006 15:04"}}</span>
+                                                <div class="mt-2 actions">
+                                                    <button class="btn btn-sm btn-icon btn-color-gray-500 btn-active-light me-1" data-id="{{.ID}}" data-action="mark-read">
+                                                        <i class="ki-outline ki-check fs-2"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-icon btn-color-gray-500 btn-active-light" data-id="{{.ID}}" data-action="delete">
+                                                        <i class="ki-outline ki-trash fs-2"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{end}}
+                                    {{else}}
+                                    <div class="text-center py-10">
+                                        <i class="ki-outline ki-notification-bing fs-3tx text-muted mb-5 d-block"></i>
+                                        <div class="text-muted fw-semibold fs-6 mb-5">Bildirim bulunmamaktadır</div>
+                                        <a href="/dashboard" class="btn btn-sm btn-light-primary">
+                                            <i class="ki-outline ki-home-2 fs-7"></i>
+                                            Ana Sayfaya Dön
+                                        </a>
+                                    </div>
+                                    {{end}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div id="kt_app_footer" class="app-footer">
+                <div class="app-container container-fluid d-flex flex-column flex-md-row flex-center flex-md-stack py-3">
+                    <div class="text-gray-900 order-2 order-md-1">
+                        <span class="text-muted fw-semibold me-1">{{now.Format "2006"}}&copy;</span>
+                        <a href="/" class="text-gray-800 text-hover-primary">Esnaf Yönetim Sistemi</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="assets/plugins/global/plugins.bundle.js"></script>
+<script src="assets/js/scripts.bundle.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Bildirim filtrelerini işle
+    const filterButtons = document.querySelectorAll('[data-filter]');
+    const notificationItems = document.querySelectorAll('.notification-item');
+    
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Aktif butonu güncelle
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            const filter = button.getAttribute('data-filter');
+            
+            // Bildirimler filtresini uygula
+            notificationItems.forEach(item => {
+                if (filter === 'all' || item.getAttribute('data-type') === filter) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+    
+    // Bildirim işlemlerini (okundu, silme) işle
+    document.querySelectorAll('[data-action="mark-read"]').forEach(button => {
+        button.addEventListener('click', () => {
+            const id = button.getAttribute('data-id');
+            markNotificationAsRead(id);
+        });
+    });
+    
+    document.querySelectorAll('[data-action="delete"]').forEach(button => {
+        button.addEventListener('click', () => {
+            const id = button.getAttribute('data-id');
+            deleteNotification(id);
+        });
+    });
+    
+    // Tümünü okundu işaretle
+    document.getElementById('mark_all_read').addEventListener('click', markAllAsRead);
+    
+    // Fonksiyonlar (Backend entegrasyonu için)
+    function markNotificationAsRead(id) {
+        console.log(`Bildirim ${id} okundu olarak işaretlendi`);
+        // TODO: API ile bildirim durumunu güncelleme
+        // fetch('/api/v1/notifications/' + id + '/read', { method: 'POST' })
+        //   .then(response => response.json())
+        //   .then(data => { /* bildirim görünümünü güncelle */ });
+    }
+    
+    function deleteNotification(id) {
+        console.log(`Bildirim ${id} silindi`);
+        // TODO: API ile bildirim silme
+        // fetch('/api/v1/notifications/' + id, { method: 'DELETE' })
+        //   .then(response => response.json())
+        //   .then(data => { /* bildirim öğesini kaldır */ });
+    }
+    
+    function markAllAsRead() {
+        console.log('Tüm bildirimler okundu olarak işaretlendi');
+        // TODO: API ile tüm bildirimleri okundu olarak işaretle
+        // fetch('/api/v1/notifications/mark-all-read', { method: 'POST' })
+        //   .then(response => response.json())
+        //   .then(data => { /* bildirimleri güncelle */ });
+    }
+});
+</script>
+</body>
+</html>

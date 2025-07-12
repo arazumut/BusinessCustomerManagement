@@ -25,6 +25,15 @@ func Setup(r *gin.Engine, h *handlers.Handler) {
 	// Randevular
 	r.GET("/appointments", h.Appointments)
 
+	// Faturalar
+	r.GET("/invoices", h.Invoices)
+
+	// Raporlar
+	r.GET("/reports", h.Reports)
+
+	// Bildirimler
+	r.GET("/notifications", h.Notifications)
+
 	// Profil Sayfası
 	r.GET("/profile", h.Profile)
 

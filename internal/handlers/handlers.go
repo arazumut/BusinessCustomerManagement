@@ -132,6 +132,33 @@ func (h *Handler) Settings(c *gin.Context) {
 	})
 }
 
+// Faturalar
+func (h *Handler) Invoices(c *gin.Context) {
+	// İleride fatura bilgileri için getInvoices() fonksiyonu oluşturulabilir
+	c.HTML(http.StatusOK, "invoices.html", gin.H{
+		"title":  "Faturalar - Esnaf Yönetim Sistemi",
+		"active": "invoices",
+	})
+}
+
+// Raporlar
+func (h *Handler) Reports(c *gin.Context) {
+	// İleride rapor bilgileri için getReports() fonksiyonu oluşturulabilir
+	c.HTML(http.StatusOK, "reports.html", gin.H{
+		"title":  "Raporlar - Esnaf Yönetim Sistemi",
+		"active": "reports",
+	})
+}
+
+// Bildirimler
+func (h *Handler) Notifications(c *gin.Context) {
+	// İleride bildirim bilgileri için getNotifications() fonksiyonu oluşturulabilir
+	c.HTML(http.StatusOK, "notifications.html", gin.H{
+		"title":  "Bildirimler - Esnaf Yönetim Sistemi",
+		"active": "notifications",
+	})
+}
+
 // API Endpoints
 func (h *Handler) GetCustomersAPI(c *gin.Context) {
 	customers, err := h.getCustomers()
