@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <base href="../" />
+    <title>{{.title}}</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="Esnaf ve İşletme Yönetim Sistemi" />
+    <meta name="keywords" content="esnaf, işletme, yönetim, muhasebe, müşteri, sipariş" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:locale" content="tr_TR" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Esnaf Yönetim Sistemi" />
+    <meta property="og:site_name" content="Esnaf Yönetim" />
+    <link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <style>
+        @media (max-width: 991.98px) {
+            .app-sidebar {
+                position: fixed;
+                z-index: 105;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .app-sidebar-open .app-sidebar {
+                transform: translateX(0);
+            }
+            .app-wrapper {
+                margin-left: 0 !important;
+            }
+            #kt_app_sidebar_toggle {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+
+<body id="kt_app_body" data-kt-app-header-fixed="true" data-kt-app-header-fixed-mobile="true" 
+      data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" 
+      data-kt-app-sidebar-hoverable="true" data-kt-app-sidebar-push-toolbar="true" 
+      data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true" 
+      class="app-default">
+
+<div class="d-flex flex-column flex-root app-root" id="kt_app_root">
+    <div class="app-page flex-column flex-column-fluid" id="kt_app_page">
+        
+        <!-- Header -->
+        <div id="kt_app_header" class="app-header d-flex flex-column flex-stack">
+            <div class="d-flex flex-stack flex-grow-1">
+                <div class="app-navbar flex-grow-1 justify-content-between" id="kt_app_header_navbar">
+                    <!-- Mobile sidebar toggle -->
+                    <div class="d-flex d-lg-none">
+                        <button class="btn btn-icon btn-active-color-primary" id="kt_app_sidebar_toggle">
+                            <i class="ki-outline ki-burger-menu fs-2x"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Search -->
+                    <div class="app-navbar-item d-flex align-items-stretch flex-lg-grow-1">
+                        <div id="kt_header_search" class="header-search d-flex align-items-center w-lg-350px">
+                            <form class="d-none d-lg-block w-100 position-relative mb-5 mb-lg-0" autocomplete="off">
+                                <input type="hidden" />
+                                <i class="ki-outline ki-magnifier search-icon fs-2 text-gray-500 position-absolute top-50 translate-middle-y ms-5"></i>
+                                <input type="text" class="search-input form-control form-control border h-lg-45px ps-13" 
+                                       name="search" value="" placeholder="Ara..." />
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- User Menu -->
+                    <div class="app-navbar-item ms-2 ms-lg-6" id="kt_header_user_menu_toggle">
+                        <div class="cursor-pointer symbol symbol-circle symbol-30px symbol-lg-45px">
+                            <img src="assets/media/avatars/300-2.jpg" alt="user" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div id="kt_app_sidebar" class="app-sidebar flex-column" data-kt-drawer="true" 
+             data-kt-drawer-name="app-sidebar" data-kt-drawer-activate="{default: true, lg: false}" 
+             data-kt-drawer-overlay="true" data-kt-drawer-width="250px" 
+             data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_app_sidebar_toggle">
+            
+            <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
+                <a href="/">
+                    <img alt="Logo" src="assets/media/logos/default-dark.svg" class="h-25px app-sidebar-logo-default" />
+                    <img alt="Logo" src="assets/media/logos/default-small.svg" class="h-20px app-sidebar-logo-minimize" />
+                </a>
+                <div id="kt_app_sidebar_toggle_mobile" class="app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary d-lg-none" data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="app-sidebar-minimize">
+                    <i class="ki-outline ki-double-left fs-2"></i>
+                </div>
+            </div>
+
+            <div class="app-sidebar-menu overflow-hidden flex-column-fluid">
+                <div id="kt_app_sidebar_menu_wrapper" class="app-sidebar-wrapper hover-scroll-overlay-y my-5" 
+                     data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-height="auto">
+                    
+                    <div class="menu menu-column menu-rounded menu-sub-indention px-3" id="#kt_app_sidebar_menu">
+                        
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "dashboard"}}active{{end}}" href="/dashboard">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-element-11 fs-2"></i>
+                                </span>
+                                <span class="menu-title">Dashboard</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "customers"}}active{{end}}" href="/customers">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-profile-circle fs-2"></i>
+                                </span>
+                                <span class="menu-title">Müşteriler</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "products"}}active{{end}}" href="/products">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-box fs-2"></i>
+                                </span>
+                                <span class="menu-title">Ürünler/Hizmetler</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "orders"}}active{{end}}" href="/orders">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-basket fs-2"></i>
+                                </span>
+                                <span class="menu-title">Siparişler</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "accounting"}}active{{end}}" href="/accounting">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-chart-line fs-2"></i>
+                                </span>
+                                <span class="menu-title">Muhasebe</span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
+            <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+                <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+                    <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                        <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
+                            Dashboard
+                        </h1>
+                        <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                            <li class="breadcrumb-item text-muted">
+                                <a href="/" class="text-muted text-hover-primary">Ana Sayfa</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                            </li>
+                            <li class="breadcrumb-item text-muted">Dashboard</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="kt_app_content" class="app-content flex-column-fluid">
+                <div id="kt_app_content_container" class="app-container container-fluid">
+                    
+                    <!-- İstatistik Kartları -->
+                    <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+                        
+                        <!-- Toplam Müşteriler -->
+                        <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-0">
+                            <div class="card card-flush h-md-100 h-xl-100 shadow-sm">
+                                <div class="card-header pt-5">
+                                    <div class="card-title d-flex flex-column">
+                                        <div class="d-flex align-items-center">
+                                            <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">Toplam</span>
+                                            <span class="fs-2hx fw-bold text-gray-800 me-2 lh-1 ls-n2">{{.stats.TotalCustomers}}</span>
+                                        </div>
+                                        <span class="text-gray-500 pt-1 fw-semibold fs-6">Müşteri</span>
+                                    </div>
+                                </div>
+                                <div class="card-body d-flex align-items-end pt-0">
+                                    <div class="d-flex align-items-center flex-column mt-3 w-100">
+                                        <div class="d-flex justify-content-between fw-bold fs-6 text-gray-800 w-100 mt-auto mb-2">
+                                            <span>Bu Ay</span>
+                                            <span>+{{.stats.TotalCustomers}}</span>
+                                        </div>
+                                        <div class="h-8px mx-3 w-100 bg-light-success rounded">
+                                            <div class="bg-success rounded h-8px" role="progressbar" style="width: 50%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Toplam Ürünler -->
+                        <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-0">
+                            <div class="card card-flush h-md-100 h-xl-100 shadow-sm">
+                                <div class="card-header pt-5">
+                                    <div class="card-title d-flex flex-column">
+                                        <div class="d-flex align-items-center">
+                                            <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">Toplam</span>
+                                            <span class="fs-2hx fw-bold text-gray-800 me-2 lh-1 ls-n2">{{.stats.TotalProducts}}</span>
+                                        </div>
+                                        <span class="text-gray-500 pt-1 fw-semibold fs-6">Ürün/Hizmet</span>
+                                    </div>
+                                </div>
+                                <div class="card-body d-flex align-items-end pt-0">
+                                    <div class="d-flex align-items-center flex-column mt-3 w-100">
+                                        <div class="d-flex justify-content-between fw-bold fs-6 text-gray-800 w-100 mt-auto mb-2">
+                                            <span>Aktif</span>
+                                            <span>{{.stats.TotalProducts}}</span>
+                                        </div>
+                                        <div class="h-8px mx-3 w-100 bg-light-primary rounded">
+                                            <div class="bg-primary rounded h-8px" role="progressbar" style="width: 70%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Aylık Gelir -->
+                        <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-0">
+                            <div class="card card-flush h-md-100 h-xl-100 shadow-sm">
+                                <div class="card-header pt-5">
+                                    <div class="card-title d-flex flex-column">
+                                        <div class="d-flex align-items-center">
+                                            <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">₺</span>
+                                            <span class="fs-2hx fw-bold text-gray-800 me-2 lh-1 ls-n2">{{printf "%.2f" .stats.MonthlyRevenue}}</span>
+                                        </div>
+                                        <span class="text-gray-500 pt-1 fw-semibold fs-6">Aylık Gelir</span>
+                                    </div>
+                                </div>
+                                <div class="card-body d-flex align-items-end pt-0">
+                                    <div class="d-flex align-items-center flex-column mt-3 w-100">
+                                        <div class="d-flex justify-content-between fw-bold fs-6 text-gray-800 w-100 mt-auto mb-2">
+                                            <span>Bu Ay</span>
+                                            <span>+15%</span>
+                                        </div>
+                                        <div class="h-8px mx-3 w-100 bg-light-warning rounded">
+                                            <div class="bg-warning rounded h-8px" role="progressbar" style="width: 65%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bekleyen Siparişler -->
+                        <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-0">
+                            <div class="card card-flush h-md-100 h-xl-100 shadow-sm">
+                                <div class="card-header pt-5">
+                                    <div class="card-title d-flex flex-column">
+                                        <div class="d-flex align-items-center">
+                                            <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">Bekleyen</span>
+                                            <span class="fs-2hx fw-bold text-gray-800 me-2 lh-1 ls-n2">{{.stats.PendingOrders}}</span>
+                                        </div>
+                                        <span class="text-gray-500 pt-1 fw-semibold fs-6">Sipariş</span>
+                                    </div>
+                                </div>
+                                <div class="card-body d-flex align-items-end pt-0">
+                                    <div class="d-flex align-items-center flex-column mt-3 w-100">
+                                        <div class="d-flex justify-content-between fw-bold fs-6 text-gray-800 w-100 mt-auto mb-2">
+                                            <span>Toplam</span>
+                                            <span>{{.stats.TotalOrders}}</span>
+                                        </div>
+                                        <div class="h-8px mx-3 w-100 bg-light-danger rounded">
+                                            <div class="bg-danger rounded h-8px" role="progressbar" style="width: 40%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hızlı Erişim Kartları -->
+                    <div class="row g-5 g-xl-10">
+                        
+                        <!-- Yeni Müşteri Ekle -->
+                        <div class="col-xl-4 mb-xl-10">
+                            <div class="card card-flush h-xl-100 shadow-sm hover-elevate-up">
+                                <div class="card-header rounded bgi-no-repeat bgi-size-cover bgi-position-y-top bgi-position-x-center align-items-start h-250px" 
+                                     style="background-image:url('assets/media/svg/shapes/top-green.png')">
+                                    <h3 class="card-title align-items-start flex-column text-white pt-15">
+                                        <span class="fw-bold fs-2x mb-3">Yeni Müşteri</span>
+                                        <div class="fs-4 text-white">
+                                            <span class="opacity-75">Hızlı müşteri kaydı</span>
+                                        </div>
+                                    </h3>
+                                </div>
+                                <div class="card-body d-flex justify-content-between flex-column px-0 pb-0">
+                                    <div class="mb-7 px-9">
+                                        <div class="d-flex align-items-center mb-6">
+                                            <span class="me-2 text-gray-600 fs-6 fw-bold">Yeni müşteri eklemek için tıklayın</span>
+                                        </div>
+                                        <a href="/customers" class="btn btn-primary w-100 py-3">Müşteri Ekle</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Yeni Sipariş -->
+                        <div class="col-xl-4 mb-xl-10">
+                            <div class="card card-flush h-xl-100 shadow-sm hover-elevate-up">
+                                <div class="card-header rounded bgi-no-repeat bgi-size-cover bgi-position-y-top bgi-position-x-center align-items-start h-250px" 
+                                     style="background-image:url('assets/media/svg/shapes/top-blue.png')">
+                                    <h3 class="card-title align-items-start flex-column text-white pt-15">
+                                        <span class="fw-bold fs-2x mb-3">Yeni Sipariş</span>
+                                        <div class="fs-4 text-white">
+                                            <span class="opacity-75">Sipariş oluştur</span>
+                                        </div>
+                                    </h3>
+                                </div>
+                                <div class="card-body d-flex justify-content-between flex-column px-0 pb-0">
+                                    <div class="mb-7 px-9">
+                                        <div class="d-flex align-items-center mb-6">
+                                            <span class="me-2 text-gray-600 fs-6 fw-bold">Yeni sipariş oluşturmak için tıklayın</span>
+                                        </div>
+                                        <a href="/orders" class="btn btn-primary w-100 py-3">Sipariş Oluştur</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Raporlar -->
+                        <div class="col-xl-4 mb-xl-10">
+                            <div class="card card-flush h-xl-100 shadow-sm hover-elevate-up">
+                                <div class="card-header rounded bgi-no-repeat bgi-size-cover bgi-position-y-top bgi-position-x-center align-items-start h-250px" 
+                                     style="background-image:url('assets/media/svg/shapes/top-red.png')">
+                                    <h3 class="card-title align-items-start flex-column text-white pt-15">
+                                        <span class="fw-bold fs-2x mb-3">Raporlar</span>
+                                        <div class="fs-4 text-white">
+                                            <span class="opacity-75">Gelir-gider analizi</span>
+                                        </div>
+                                    </h3>
+                                </div>
+                                <div class="card-body d-flex justify-content-between flex-column px-0 pb-0">
+                                    <div class="mb-7 px-9">
+                                        <div class="d-flex align-items-center mb-6">
+                                            <span class="me-2 text-gray-600 fs-6 fw-bold">Muhasebe raporlarını görüntüle</span>
+                                        </div>
+                                        <a href="/accounting" class="btn btn-primary w-100 py-3">Raporları Gör</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="assets/plugins/global/plugins.bundle.js"></script>
+<script src="assets/js/scripts.bundle.js"></script>
+<script src="assets/js/widgets.bundle.js"></script>
+<script src="assets/js/custom/widgets.js"></script>
+<script>
+    // Sidebar toggle işlemleri
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sidebar toggle butonları
+        const sidebarToggleBtn = document.getElementById('kt_app_sidebar_toggle');
+        const sidebarToggleMobileBtn = document.getElementById('kt_app_sidebar_toggle_mobile');
+        const appBody = document.getElementById('kt_app_body');
+
+        // Sidebar toggle fonksiyonu
+        function toggleSidebar() {
+            if (appBody.classList.contains('app-sidebar-open')) {
+                appBody.classList.remove('app-sidebar-open');
+            } else {
+                appBody.classList.add('app-sidebar-open');
+            }
+        }
+
+        // Event listener'ları ekle
+        if (sidebarToggleBtn) {
+            sidebarToggleBtn.addEventListener('click', toggleSidebar);
+        }
+        
+        if (sidebarToggleMobileBtn) {
+            sidebarToggleMobileBtn.addEventListener('click', toggleSidebar);
+        }
+
+        // Dışarı tıklandığında sidebar'ı kapat (sadece mobil görünümde)
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('kt_app_sidebar');
+            const isMobile = window.innerWidth < 992;
+            
+            if (isMobile && appBody.classList.contains('app-sidebar-open') && 
+                sidebar && !sidebar.contains(e.target) && 
+                sidebarToggleBtn && !sidebarToggleBtn.contains(e.target)) {
+                appBody.classList.remove('app-sidebar-open');
+            }
+        });
+
+        // Sayfa yüklendiğinde aktif menü öğesini vurgula
+        const activeMenuLink = document.querySelector('.menu-link.active');
+        if (activeMenuLink) {
+            activeMenuLink.scrollIntoView({ block: 'center' });
+        }
+    });
+</script>
+
+</body>
+</html>

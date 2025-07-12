@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <base href="../" />
+    <title>{{.title}}</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="Esnaf ve İşletme Yönetim Sistemi" />
+    <meta name="keywords" content="esnaf, işletme, yönetim, muhasebe, müşteri, sipariş" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:locale" content="tr_TR" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Esnaf Yönetim Sistemi" />
+    <meta property="og:site_name" content="Esnaf Yönetim" />
+    <link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <style>
+        @media (max-width: 991.98px) {
+            .app-sidebar {
+                position: fixed;
+                z-index: 105;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .app-sidebar-open .app-sidebar {
+                transform: translateX(0);
+            }
+            .app-wrapper {
+                margin-left: 0 !important;
+            }
+            #kt_app_sidebar_toggle {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+
+<body id="kt_app_body" data-kt-app-header-fixed="true" data-kt-app-header-fixed-mobile="true" 
+      data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" 
+      data-kt-app-sidebar-hoverable="true" data-kt-app-sidebar-push-toolbar="true" 
+      data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true" 
+      class="app-default">
+
+<div class="d-flex flex-column flex-root app-root" id="kt_app_root">
+    <div class="app-page flex-column flex-column-fluid" id="kt_app_page">
+        
+        <!-- Header -->
+        <div id="kt_app_header" class="app-header d-flex flex-column flex-stack">
+            <div class="d-flex flex-stack flex-grow-1">
+                <div class="app-navbar flex-grow-1 justify-content-between" id="kt_app_header_navbar">
+                    <!-- Mobile sidebar toggle -->
+                    <div class="d-flex d-lg-none">
+                        <button class="btn btn-icon btn-active-color-primary" id="kt_app_sidebar_toggle">
+                            <i class="ki-outline ki-burger-menu fs-2x"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Search -->
+                    <div class="app-navbar-item d-flex align-items-stretch flex-lg-grow-1">
+                        <div id="kt_header_search" class="header-search d-flex align-items-center w-lg-350px">
+                            <form class="d-none d-lg-block w-100 position-relative mb-5 mb-lg-0" autocomplete="off">
+                                <input type="hidden" />
+                                <i class="ki-outline ki-magnifier search-icon fs-2 text-gray-500 position-absolute top-50 translate-middle-y ms-5"></i>
+                                <input type="text" class="search-input form-control form-control border h-lg-45px ps-13" 
+                                       name="search" value="" placeholder="Ara..." />
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- User Menu -->
+                    <div class="app-navbar-item ms-2 ms-lg-6" id="kt_header_user_menu_toggle">
+                        <div class="cursor-pointer symbol symbol-circle symbol-30px symbol-lg-45px">
+                            <img src="assets/media/avatars/300-2.jpg" alt="user" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div id="kt_app_sidebar" class="app-sidebar flex-column" data-kt-drawer="true" 
+             data-kt-drawer-name="app-sidebar" data-kt-drawer-activate="{default: true, lg: false}" 
+             data-kt-drawer-overlay="true" data-kt-drawer-width="250px" 
+             data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_app_sidebar_toggle">
+            
+            <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
+                <a href="/">
+                    <img alt="Logo" src="assets/media/logos/default-dark.svg" class="h-25px app-sidebar-logo-default" />
+                    <img alt="Logo" src="assets/media/logos/default-small.svg" class="h-20px app-sidebar-logo-minimize" />
+                </a>
+                <div id="kt_app_sidebar_toggle_mobile" class="app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary d-lg-none" data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="app-sidebar-minimize">
+                    <i class="ki-outline ki-double-left fs-2"></i>
+                </div>
+            </div>
+
+            <div class="app-sidebar-menu overflow-hidden flex-column-fluid">
+                <div id="kt_app_sidebar_menu_wrapper" class="app-sidebar-wrapper hover-scroll-overlay-y my-5" 
+                     data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-height="auto">
+                    
+                    <div class="menu menu-column menu-rounded menu-sub-indention px-3" id="#kt_app_sidebar_menu">
+                        
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "dashboard"}}active{{end}}" href="/dashboard">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-element-11 fs-2"></i>
+                                </span>
+                                <span class="menu-title">Dashboard</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "customers"}}active{{end}}" href="/customers">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-profile-circle fs-2"></i>
+                                </span>
+                                <span class="menu-title">Müşteriler</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "products"}}active{{end}}" href="/products">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-box fs-2"></i>
+                                </span>
+                                <span class="menu-title">Ürünler/Hizmetler</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "orders"}}active{{end}}" href="/orders">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-basket fs-2"></i>
+                                </span>
+                                <span class="menu-title">Siparişler</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "accounting"}}active{{end}}" href="/accounting">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-chart-line fs-2"></i>
+                                </span>
+                                <span class="menu-title">Muhasebe</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "profile"}}active{{end}}" href="/profile">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-user fs-2"></i>
+                                </span>
+                                <span class="menu-title">Profilim</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "settings"}}active{{end}}" href="/settings">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-setting-2 fs-2"></i>
+                                </span>
+                                <span class="menu-title">Ayarlar</span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
+            <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+                <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+                    <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                        <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
+                            Profil Bilgilerim
+                        </h1>
+                        <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                            <li class="breadcrumb-item text-muted">
+                                <a href="/" class="text-muted text-hover-primary">Ana Sayfa</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                            </li>
+                            <li class="breadcrumb-item text-muted">Profil Bilgilerim</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="kt_app_content" class="app-content flex-column-fluid">
+                <div id="kt_app_content_container" class="app-container container-fluid">
+                    
+                    <!-- Profil Kartı -->
+                    <div class="card mb-5 mb-xl-10">
+                        <div class="card-body pt-9 pb-0">
+                            <!-- Başlık -->
+                            <div class="d-flex flex-wrap flex-sm-nowrap">
+                                <!-- Avatar -->
+                                <div class="me-7 mb-4">
+                                    <div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
+                                        <img src="assets/media/avatars/300-2.jpg" alt="image" />
+                                        <div class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-body h-20px w-20px"></div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Kullanıcı Bilgileri -->
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <a href="#" class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">{{.user.Name}}</a>
+                                                <span class="badge badge-light-success">{{.user.Role}}</span>
+                                            </div>
+                                            <div class="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
+                                                <a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+                                                    <i class="ki-outline ki-shop fs-4 me-1"></i>{{.user.BusinessName}}
+                                                </a>
+                                                <a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+                                                    <i class="ki-outline ki-geolocation fs-4 me-1"></i>{{.user.Address}}
+                                                </a>
+                                                <a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary mb-2">
+                                                    <i class="ki-outline ki-sms fs-4 me-1"></i>{{.user.Email}}
+                                                </a>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Düzenle Butonu -->
+                                        <div class="d-flex my-4">
+                                            <button type="button" class="btn btn-sm btn-primary me-3" data-bs-toggle="modal" data-bs-target="#kt_modal_update_profile">
+                                                Profili Düzenle
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Sekmeler -->
+                            <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
+                                <li class="nav-item">
+                                    <a class="nav-link text-active-primary py-5 me-6 active" href="#">Genel Bakış</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-active-primary py-5 me-6" href="#">İşletme Bilgileri</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-active-primary py-5 me-6" href="#">Güvenlik</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Profil Detayları -->
+                    <div class="card mb-5 mb-xl-10">
+                        <div class="card-header border-0 cursor-pointer" role="button" data-bs-toggle="collapse" data-bs-target="#kt_account_profile_details">
+                            <div class="card-title m-0">
+                                <h3 class="fw-bold m-0">Profil Detayları</h3>
+                            </div>
+                        </div>
+                        <div id="kt_account_profile_details" class="collapse show">
+                            <form class="form">
+                                <div class="card-body border-top p-9">
+                                    <!-- İsim -->
+                                    <div class="row mb-6">
+                                        <label class="col-lg-4 col-form-label fw-semibold fs-6">İsim Soyisim</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control form-control-lg form-control-solid" 
+                                                   name="name" value="{{.user.Name}}" />
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- İşletme Adı -->
+                                    <div class="row mb-6">
+                                        <label class="col-lg-4 col-form-label fw-semibold fs-6">İşletme Adı</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control form-control-lg form-control-solid" 
+                                                   name="business_name" value="{{.user.BusinessName}}" />
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- E-posta -->
+                                    <div class="row mb-6">
+                                        <label class="col-lg-4 col-form-label fw-semibold fs-6">E-posta</label>
+                                        <div class="col-lg-8">
+                                            <input type="email" class="form-control form-control-lg form-control-solid" 
+                                                   name="email" value="{{.user.Email}}" />
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Telefon -->
+                                    <div class="row mb-6">
+                                        <label class="col-lg-4 col-form-label fw-semibold fs-6">Telefon Numarası</label>
+                                        <div class="col-lg-8">
+                                            <input type="tel" class="form-control form-control-lg form-control-solid" 
+                                                   name="phone" value="{{.user.Phone}}" />
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Adres -->
+                                    <div class="row mb-6">
+                                        <label class="col-lg-4 col-form-label fw-semibold fs-6">Adres</label>
+                                        <div class="col-lg-8">
+                                            <textarea class="form-control form-control-lg form-control-solid" 
+                                                      name="address" rows="3">{{.user.Address}}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Form Alt Kısmı -->
+                                <div class="card-footer d-flex justify-content-end py-6 px-9">
+                                    <button type="reset" class="btn btn-light btn-active-light-primary me-2">İptal</button>
+                                    <button type="submit" class="btn btn-primary">Değişiklikleri Kaydet</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Şifre Değiştirme -->
+                    <div class="card mb-5 mb-xl-10">
+                        <div class="card-header border-0 cursor-pointer" role="button" data-bs-toggle="collapse" data-bs-target="#kt_account_password">
+                            <div class="card-title m-0">
+                                <h3 class="fw-bold m-0">Şifre Değiştir</h3>
+                            </div>
+                        </div>
+                        <div id="kt_account_password" class="collapse show">
+                            <form class="form">
+                                <div class="card-body border-top p-9">
+                                    <!-- Mevcut Şifre -->
+                                    <div class="row mb-6">
+                                        <label class="col-lg-4 col-form-label fw-semibold fs-6">Mevcut Şifre</label>
+                                        <div class="col-lg-8">
+                                            <input type="password" class="form-control form-control-lg form-control-solid" 
+                                                   name="current_password" />
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Yeni Şifre -->
+                                    <div class="row mb-6">
+                                        <label class="col-lg-4 col-form-label fw-semibold fs-6">Yeni Şifre</label>
+                                        <div class="col-lg-8">
+                                            <input type="password" class="form-control form-control-lg form-control-solid" 
+                                                   name="new_password" />
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Şifre Tekrar -->
+                                    <div class="row mb-6">
+                                        <label class="col-lg-4 col-form-label fw-semibold fs-6">Şifreyi Tekrar Girin</label>
+                                        <div class="col-lg-8">
+                                            <input type="password" class="form-control form-control-lg form-control-solid" 
+                                                   name="confirm_password" />
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Form Alt Kısmı -->
+                                <div class="card-footer d-flex justify-content-end py-6 px-9">
+                                    <button type="reset" class="btn btn-light btn-active-light-primary me-2">İptal</button>
+                                    <button type="submit" class="btn btn-primary">Şifreyi Değiştir</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Profil Düzenleme Modal -->
+                    <div class="modal fade" id="kt_modal_update_profile" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered mw-650px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="fw-bold">Profili Düzenle</h2>
+                                    <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                                        <i class="ki-outline ki-cross fs-1"></i>
+                                    </div>
+                                </div>
+                                <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
+                                    <form id="kt_modal_update_profile_form" class="form">
+                                        <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_update_profile_scroll">
+                                            <div class="fv-row mb-7">
+                                                <label class="d-block fw-semibold fs-6 mb-5">Profil Fotoğrafı</label>
+                                                <div class="image-input image-input-outline" data-kt-image-input="true" style="background-image: url('assets/media/avatars/blank.png')">
+                                                    <div class="image-input-wrapper w-125px h-125px" style="background-image: url('assets/media/avatars/300-2.jpg')"></div>
+                                                    <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change">
+                                                        <i class="ki-outline ki-pencil fs-7"></i>
+                                                        <input type="file" name="avatar" accept=".png, .jpg, .jpeg" />
+                                                        <input type="hidden" name="avatar_remove" />
+                                                    </label>
+                                                    <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel">
+                                                        <i class="ki-outline ki-cross fs-2"></i>
+                                                    </span>
+                                                    <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove">
+                                                        <i class="ki-outline ki-cross fs-2"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="form-text">İzin verilen dosya tipleri: png, jpg, jpeg.</div>
+                                            </div>
+                                            
+                                            <div class="fv-row mb-7">
+                                                <label class="required fw-semibold fs-6 mb-2">İsim Soyisim</label>
+                                                <input type="text" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="İsim Soyisim" value="{{.user.Name}}" />
+                                            </div>
+                                            
+                                            <div class="fv-row mb-7">
+                                                <label class="required fw-semibold fs-6 mb-2">İşletme Adı</label>
+                                                <input type="text" name="business_name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="İşletme Adı" value="{{.user.BusinessName}}" />
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="text-center pt-15">
+                                            <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal">İptal</button>
+                                            <button type="submit" id="kt_modal_update_profile_submit" class="btn btn-primary">
+                                                <span class="indicator-label">Kaydet</span>
+                                                <span class="indicator-progress">Lütfen bekleyin...
+                                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="assets/plugins/global/plugins.bundle.js"></script>
+<script src="assets/js/scripts.bundle.js"></script>
+<script src="assets/js/widgets.bundle.js"></script>
+<script src="assets/js/custom/widgets.js"></script>
+<script>
+    // Sidebar toggle işlemleri
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sidebar toggle butonları
+        const sidebarToggleBtn = document.getElementById('kt_app_sidebar_toggle');
+        const sidebarToggleMobileBtn = document.getElementById('kt_app_sidebar_toggle_mobile');
+        const appBody = document.getElementById('kt_app_body');
+
+        // Sidebar toggle fonksiyonu
+        function toggleSidebar() {
+            if (appBody.classList.contains('app-sidebar-open')) {
+                appBody.classList.remove('app-sidebar-open');
+            } else {
+                appBody.classList.add('app-sidebar-open');
+            }
+        }
+
+        // Event listener'ları ekle
+        if (sidebarToggleBtn) {
+            sidebarToggleBtn.addEventListener('click', toggleSidebar);
+        }
+        
+        if (sidebarToggleMobileBtn) {
+            sidebarToggleMobileBtn.addEventListener('click', toggleSidebar);
+        }
+
+        // Dışarı tıklandığında sidebar'ı kapat (sadece mobil görünümde)
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('kt_app_sidebar');
+            const isMobile = window.innerWidth < 992;
+            
+            if (isMobile && appBody.classList.contains('app-sidebar-open') && 
+                sidebar && !sidebar.contains(e.target) && 
+                sidebarToggleBtn && !sidebarToggleBtn.contains(e.target)) {
+                appBody.classList.remove('app-sidebar-open');
+            }
+        });
+
+        // Sayfa yüklendiğinde aktif menü öğesini vurgula
+        const activeMenuLink = document.querySelector('.menu-link.active');
+        if (activeMenuLink) {
+            activeMenuLink.scrollIntoView({ block: 'center' });
+        }
+    });
+</script>
+
+</body>
+</html>

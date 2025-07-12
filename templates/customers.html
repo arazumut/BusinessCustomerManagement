@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <base href="../" />
+    <title>{{.title}}</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="Esnaf ve İşletme Yönetim Sistemi" />
+    <meta name="keywords" content="esnaf, işletme, yönetim, muhasebe, müşteri, sipariş" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:locale" content="tr_TR" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Esnaf Yönetim Sistemi" />
+    <meta property="og:site_name" content="Esnaf Yönetim" />
+    <link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <style>
+        @media (max-width: 991.98px) {
+            .app-sidebar {
+                position: fixed;
+                z-index: 105;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .app-sidebar-open .app-sidebar {
+                transform: translateX(0);
+            }
+            .app-wrapper {
+                margin-left: 0 !important;
+            }
+            #kt_app_sidebar_toggle {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+
+<body id="kt_app_body" data-kt-app-header-fixed="true" data-kt-app-header-fixed-mobile="true" 
+      data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" 
+      data-kt-app-sidebar-hoverable="true" data-kt-app-sidebar-push-toolbar="true" 
+      data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true" 
+      class="app-default">
+
+<div class="d-flex flex-column flex-root app-root" id="kt_app_root">
+    <div class="app-page flex-column flex-column-fluid" id="kt_app_page">
+        
+        <!-- Header -->
+        <div id="kt_app_header" class="app-header d-flex flex-column flex-stack">
+            <div class="d-flex flex-stack flex-grow-1">
+                <div class="app-navbar flex-grow-1 justify-content-between" id="kt_app_header_navbar">
+                    <!-- Mobile sidebar toggle -->
+                    <div class="d-flex d-lg-none">
+                        <button class="btn btn-icon btn-active-color-primary" id="kt_app_sidebar_toggle">
+                            <i class="ki-outline ki-burger-menu fs-2x"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Search -->
+                    <div class="app-navbar-item d-flex align-items-stretch flex-lg-grow-1">
+                        <div id="kt_header_search" class="header-search d-flex align-items-center w-lg-350px">
+                            <form class="d-none d-lg-block w-100 position-relative mb-5 mb-lg-0" autocomplete="off">
+                                <input type="hidden" />
+                                <i class="ki-outline ki-magnifier search-icon fs-2 text-gray-500 position-absolute top-50 translate-middle-y ms-5"></i>
+                                <input type="text" class="search-input form-control form-control border h-lg-45px ps-13" 
+                                       name="search" value="" placeholder="Müşteri Ara..." />
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- User Menu -->
+                    <div class="app-navbar-item ms-2 ms-lg-6" id="kt_header_user_menu_toggle">
+                        <div class="cursor-pointer symbol symbol-circle symbol-30px symbol-lg-45px">
+                            <img src="assets/media/avatars/300-2.jpg" alt="user" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div id="kt_app_sidebar" class="app-sidebar flex-column" data-kt-drawer="true" 
+             data-kt-drawer-name="app-sidebar" data-kt-drawer-activate="{default: true, lg: false}" 
+             data-kt-drawer-overlay="true" data-kt-drawer-width="250px" 
+             data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_app_sidebar_toggle">
+            
+            <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
+                <a href="/">
+                    <img alt="Logo" src="assets/media/logos/default-dark.svg" class="h-25px app-sidebar-logo-default" />
+                    <img alt="Logo" src="assets/media/logos/default-small.svg" class="h-20px app-sidebar-logo-minimize" />
+                </a>
+                <div id="kt_app_sidebar_toggle_mobile" class="app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary d-lg-none" data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="app-sidebar-minimize">
+                    <i class="ki-outline ki-double-left fs-2"></i>
+                </div>
+            </div>
+
+            <div class="app-sidebar-menu overflow-hidden flex-column-fluid">
+                <div id="kt_app_sidebar_menu_wrapper" class="app-sidebar-wrapper hover-scroll-overlay-y my-5" 
+                     data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-height="auto">
+                    
+                    <div class="menu menu-column menu-rounded menu-sub-indention px-3" id="#kt_app_sidebar_menu">
+                        
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "dashboard"}}active{{end}}" href="/dashboard">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-element-11 fs-2"></i>
+                                </span>
+                                <span class="menu-title">Dashboard</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "customers"}}active{{end}}" href="/customers">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-profile-circle fs-2"></i>
+                                </span>
+                                <span class="menu-title">Müşteriler</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "products"}}active{{end}}" href="/products">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-box fs-2"></i>
+                                </span>
+                                <span class="menu-title">Ürünler/Hizmetler</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "orders"}}active{{end}}" href="/orders">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-basket fs-2"></i>
+                                </span>
+                                <span class="menu-title">Siparişler</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "accounting"}}active{{end}}" href="/accounting">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-chart-line fs-2"></i>
+                                </span>
+                                <span class="menu-title">Muhasebe</span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
+            <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+                <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+                    <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                        <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
+                            Müşteriler
+                        </h1>
+                        <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                            <li class="breadcrumb-item text-muted">
+                                <a href="/" class="text-muted text-hover-primary">Ana Sayfa</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                            </li>
+                            <li class="breadcrumb-item text-muted">Müşteriler</li>
+                        </ul>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 gap-lg-3">
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_customer">
+                            <i class="ki-outline ki-plus fs-2"></i>Yeni Müşteri
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="kt_app_content" class="app-content flex-column-fluid">
+                <div id="kt_app_content_container" class="app-container container-fluid">
+                    
+                    <!-- Müşteriler Tablosu -->
+                    <div class="card shadow-sm">
+                        <div class="card-header border-0 pt-6">
+                            <div class="card-title">
+                                <div class="d-flex align-items-center position-relative my-1">
+                                    <i class="ki-outline ki-magnifier fs-3 position-absolute ms-5"></i>
+                                    <input type="text" data-kt-customer-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Müşteri Ara" />
+                                </div>
+                            </div>
+                            <div class="card-toolbar">
+                                <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                                    <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                        <i class="ki-outline ki-filter fs-2"></i>Filtre
+                                    </button>
+                                    <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true">
+                                        <div class="px-7 py-5">
+                                            <div class="fs-5 text-gray-900 fw-bold">Filtre Seçenekleri</div>
+                                        </div>
+                                        <div class="separator border-gray-200"></div>
+                                        <div class="px-7 py-5">
+                                            <div class="mb-10">
+                                                <label class="form-label fw-semibold">Müşteri Türü:</label>
+                                                <div>
+                                                    <select class="form-select form-select-solid" data-kt-select2="true" data-placeholder="Seçiniz" data-allow-clear="true">
+                                                        <option></option>
+                                                        <option value="1">Bireysel</option>
+                                                        <option value="2">Kurumsal</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2" data-kt-menu-dismiss="true">Sıfırla</button>
+                                                <button type="submit" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true">Uygula</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body pt-0">
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <thead>
+                                    <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Müşteri Adı</th>
+                                        <th class="min-w-125px">Telefon</th>
+                                        <th class="min-w-125px">E-posta</th>
+                                        <th class="min-w-125px">Ekleme Tarihi</th>
+                                        <th class="min-w-125px">Bakiye</th>
+                                        <th class="text-end min-w-70px">İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="fw-semibold text-gray-700">
+                                    {{range .customers}}
+                                    <tr>
+                                        <td>
+                                            <a href="/customers/detail/{{.ID}}" class="text-gray-900 text-hover-primary mb-1">{{.Name}}</a>
+                                        </td>
+                                        <td>{{.Phone}}</td>
+                                        <td>{{.Email}}</td>
+                                        <td>{{.CreatedAt.Format "02.01.2006"}}</td>
+                                        <td>{{printf "%.2f" .Balance}} ₺</td>
+                                        <td class="text-end">
+                                            <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                                <i class="ki-outline ki-pencil fs-2"></i>
+                                            </a>
+                                            <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                                                <i class="ki-outline ki-trash fs-2"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {{else}}
+                                    <tr>
+                                        <td colspan="6" class="text-center">Henüz müşteri bulunmamaktadır.</td>
+                                    </tr>
+                                    {{end}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Yeni Müşteri Ekleme Modal -->
+<div class="modal fade" id="kt_modal_add_customer" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="fw-bold">Yeni Müşteri Ekle</h2>
+                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                    <i class="ki-outline ki-cross fs-1"></i>
+                </div>
+            </div>
+            <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
+                <form id="kt_modal_add_customer_form" class="form" action="/customers/add" method="post">
+                    <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll">
+                        <div class="fv-row mb-7">
+                            <label class="required fw-semibold fs-6 mb-2">Müşteri Adı</label>
+                            <input type="text" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Müşteri adı giriniz" required />
+                        </div>
+                        <div class="fv-row mb-7">
+                            <label class="fw-semibold fs-6 mb-2">Telefon</label>
+                            <input type="tel" name="phone" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Telefon numarası" />
+                        </div>
+                        <div class="fv-row mb-7">
+                            <label class="fw-semibold fs-6 mb-2">E-posta</label>
+                            <input type="email" name="email" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="E-posta adresi" />
+                        </div>
+                        <div class="fv-row mb-7">
+                            <label class="fw-semibold fs-6 mb-2">Adres</label>
+                            <textarea name="address" class="form-control form-control-solid" rows="3" placeholder="Adres"></textarea>
+                        </div>
+                        <div class="fv-row mb-7">
+                            <label class="fw-semibold fs-6 mb-2">Notlar</label>
+                            <textarea name="notes" class="form-control form-control-solid" rows="3" placeholder="Müşteri ile ilgili notlar"></textarea>
+                        </div>
+                    </div>
+                    <div class="text-center pt-15">
+                        <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal">İptal</button>
+                        <button type="submit" id="kt_modal_add_customer_submit" class="btn btn-primary">
+                            <span class="indicator-label">Kaydet</span>
+                            <span class="indicator-progress">Lütfen bekleyin... 
+                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="assets/plugins/global/plugins.bundle.js"></script>
+<script src="assets/js/scripts.bundle.js"></script>
+<script src="assets/js/widgets.bundle.js"></script>
+<script src="assets/js/custom/widgets.js"></script>
+<script>
+    // Sidebar toggle işlemleri
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sidebar toggle butonları
+        const sidebarToggleBtn = document.getElementById('kt_app_sidebar_toggle');
+        const sidebarToggleMobileBtn = document.getElementById('kt_app_sidebar_toggle_mobile');
+        const appBody = document.getElementById('kt_app_body');
+
+        // Sidebar toggle fonksiyonu
+        function toggleSidebar() {
+            if (appBody.classList.contains('app-sidebar-open')) {
+                appBody.classList.remove('app-sidebar-open');
+            } else {
+                appBody.classList.add('app-sidebar-open');
+            }
+        }
+
+        // Event listener'ları ekle
+        if (sidebarToggleBtn) {
+            sidebarToggleBtn.addEventListener('click', toggleSidebar);
+        }
+        
+        if (sidebarToggleMobileBtn) {
+            sidebarToggleMobileBtn.addEventListener('click', toggleSidebar);
+        }
+
+        // Dışarı tıklandığında sidebar'ı kapat (sadece mobil görünümde)
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('kt_app_sidebar');
+            const isMobile = window.innerWidth < 992;
+            
+            if (isMobile && appBody.classList.contains('app-sidebar-open') && 
+                sidebar && !sidebar.contains(e.target) && 
+                sidebarToggleBtn && !sidebarToggleBtn.contains(e.target)) {
+                appBody.classList.remove('app-sidebar-open');
+            }
+        });
+
+        // Sayfa yüklendiğinde aktif menü öğesini vurgula
+        const activeMenuLink = document.querySelector('.menu-link.active');
+        if (activeMenuLink) {
+            activeMenuLink.scrollIntoView({ block: 'center' });
+        }
+
+        // Müşteri ekleme form işlemleri
+        const addCustomerForm = document.getElementById('kt_modal_add_customer_form');
+        const addCustomerSubmitButton = document.getElementById('kt_modal_add_customer_submit');
+
+        if (addCustomerForm) {
+            addCustomerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Submit butonu loading durumuna geçir
+                addCustomerSubmitButton.setAttribute('data-kt-indicator', 'on');
+                addCustomerSubmitButton.disabled = true;
+                
+                // Form verilerini topla
+                const formData = new FormData(addCustomerForm);
+                
+                // Form verilerini sunucuya gönder
+                fetch('/customers/add', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // İşlem başarılıysa
+                    if (data.success) {
+                        // Modal'ı kapat
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('kt_modal_add_customer'));
+                        modal.hide();
+                        
+                        // Sayfayı yenile
+                        location.reload();
+                    } else {
+                        // Hata mesajını göster
+                        alert(data.message || 'Bir hata oluştu');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Bir hata oluştu');
+                })
+                .finally(() => {
+                    // Submit butonunu normale döndür
+                    addCustomerSubmitButton.removeAttribute('data-kt-indicator');
+                    addCustomerSubmitButton.disabled = false;
+                });
+            });
+        }
+    });
+</script>
+
+</body>
+</html>

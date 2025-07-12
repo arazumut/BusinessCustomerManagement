@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <base href="../" />
+    <title>{{.title}}</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="Esnaf ve İşletme Yönetim Sistemi" />
+    <meta name="keywords" content="esnaf, işletme, yönetim, muhasebe, müşteri, sipariş" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:locale" content="tr_TR" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Esnaf Yönetim Sistemi" />
+    <meta property="og:site_name" content="Esnaf Yönetim" />
+    <link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <style>
+        @media (max-width: 991.98px) {
+            .app-sidebar {
+                position: fixed;
+                z-index: 105;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .app-sidebar-open .app-sidebar {
+                transform: translateX(0);
+            }
+            .app-wrapper {
+                margin-left: 0 !important;
+            }
+            #kt_app_sidebar_toggle {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+
+<body id="kt_app_body" data-kt-app-header-fixed="true" data-kt-app-header-fixed-mobile="true" 
+      data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" 
+      data-kt-app-sidebar-hoverable="true" data-kt-app-sidebar-push-toolbar="true" 
+      data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true" 
+      class="app-default">
+
+<div class="d-flex flex-column flex-root app-root" id="kt_app_root">
+    <div class="app-page flex-column flex-column-fluid" id="kt_app_page">
+        
+        <!-- Header -->
+        <div id="kt_app_header" class="app-header d-flex flex-column flex-stack">
+            <div class="d-flex flex-stack flex-grow-1">
+                <div class="app-navbar flex-grow-1 justify-content-between" id="kt_app_header_navbar">
+                    <!-- Mobile sidebar toggle -->
+                    <div class="d-flex d-lg-none">
+                        <button class="btn btn-icon btn-active-color-primary" id="kt_app_sidebar_toggle">
+                            <i class="ki-outline ki-burger-menu fs-2x"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Search -->
+                    <div class="app-navbar-item d-flex align-items-stretch flex-lg-grow-1">
+                        <div id="kt_header_search" class="header-search d-flex align-items-center w-lg-350px">
+                            <form class="d-none d-lg-block w-100 position-relative mb-5 mb-lg-0" autocomplete="off">
+                                <input type="hidden" />
+                                <i class="ki-outline ki-magnifier search-icon fs-2 text-gray-500 position-absolute top-50 translate-middle-y ms-5"></i>
+                                <input type="text" class="search-input form-control form-control border h-lg-45px ps-13" 
+                                       name="search" value="" placeholder="Ara..." />
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- User Menu -->
+                    <div class="app-navbar-item ms-2 ms-lg-6" id="kt_header_user_menu_toggle">
+                        <div class="cursor-pointer symbol symbol-circle symbol-30px symbol-lg-45px">
+                            <img src="assets/media/avatars/300-2.jpg" alt="user" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div id="kt_app_sidebar" class="app-sidebar flex-column" data-kt-drawer="true" 
+             data-kt-drawer-name="app-sidebar" data-kt-drawer-activate="{default: true, lg: false}" 
+             data-kt-drawer-overlay="true" data-kt-drawer-width="250px" 
+             data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_app_sidebar_toggle">
+            
+            <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
+                <a href="/">
+                    <img alt="Logo" src="assets/media/logos/default-dark.svg" class="h-25px app-sidebar-logo-default" />
+                    <img alt="Logo" src="assets/media/logos/default-small.svg" class="h-20px app-sidebar-logo-minimize" />
+                </a>
+                <div id="kt_app_sidebar_toggle_mobile" class="app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary d-lg-none" data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="app-sidebar-minimize">
+                    <i class="ki-outline ki-double-left fs-2"></i>
+                </div>
+            </div>
+
+            <div class="app-sidebar-menu overflow-hidden flex-column-fluid">
+                <div id="kt_app_sidebar_menu_wrapper" class="app-sidebar-wrapper hover-scroll-overlay-y my-5" 
+                     data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-height="auto">
+                    
+                    <div class="menu menu-column menu-rounded menu-sub-indention px-3" id="#kt_app_sidebar_menu">
+                        
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "dashboard"}}active{{end}}" href="/dashboard">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-element-11 fs-2"></i>
+                                </span>
+                                <span class="menu-title">Dashboard</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "customers"}}active{{end}}" href="/customers">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-profile-circle fs-2"></i>
+                                </span>
+                                <span class="menu-title">Müşteriler</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "products"}}active{{end}}" href="/products">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-box fs-2"></i>
+                                </span>
+                                <span class="menu-title">Ürünler/Hizmetler</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "orders"}}active{{end}}" href="/orders">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-basket fs-2"></i>
+                                </span>
+                                <span class="menu-title">Siparişler</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "accounting"}}active{{end}}" href="/accounting">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-chart-line fs-2"></i>
+                                </span>
+                                <span class="menu-title">Muhasebe</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "profile"}}active{{end}}" href="/profile">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-user fs-2"></i>
+                                </span>
+                                <span class="menu-title">Profilim</span>
+                            </a>
+                        </div>
+
+                        <div class="menu-item">
+                            <a class="menu-link {{if eq .active "settings"}}active{{end}}" href="/settings">
+                                <span class="menu-icon">
+                                    <i class="ki-outline ki-setting-2 fs-2"></i>
+                                </span>
+                                <span class="menu-title">Ayarlar</span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
+            <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+                <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+                    <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                        <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
+                            Sistem Ayarları
+                        </h1>
+                        <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                            <li class="breadcrumb-item text-muted">
+                                <a href="/" class="text-muted text-hover-primary">Ana Sayfa</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                            </li>
+                            <li class="breadcrumb-item text-muted">Ayarlar</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="kt_app_content" class="app-content flex-column-fluid">
+                <div id="kt_app_content_container" class="app-container container-fluid">
+                    
+                    <!-- Ayarlar Menüsü -->
+                    <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+                        <div class="col-xl-3">
+                            <div class="card card-flush shadow-sm">
+                                <div class="card-header">
+                                    <h3 class="card-title fw-bold text-gray-800">Ayarlar Menüsü</h3>
+                                </div>
+                                <div class="card-body py-5">
+                                    <div class="d-flex flex-column">
+                                        <div class="nav-group nav-group-fluid">
+                                            <div class="nav-item">
+                                                <a class="nav-link btn btn-active-light-primary py-3 px-6 active" data-bs-toggle="tab" href="#kt_tab_general">
+                                                    <span class="d-flex align-items-center">
+                                                        <i class="ki-outline ki-wrench fs-2 me-2"></i>
+                                                        Genel Ayarlar
+                                                    </span>
+                                                </a>
+                                            </div>
+                                            <div class="nav-item">
+                                                <a class="nav-link btn btn-active-light-primary py-3 px-6" data-bs-toggle="tab" href="#kt_tab_notifications">
+                                                    <span class="d-flex align-items-center">
+                                                        <i class="ki-outline ki-notification-status fs-2 me-2"></i>
+                                                        Bildirim Ayarları
+                                                    </span>
+                                                </a>
+                                            </div>
+                                            <div class="nav-item">
+                                                <a class="nav-link btn btn-active-light-primary py-3 px-6" data-bs-toggle="tab" href="#kt_tab_users">
+                                                    <span class="d-flex align-items-center">
+                                                        <i class="ki-outline ki-people fs-2 me-2"></i>
+                                                        Kullanıcı Yönetimi
+                                                    </span>
+                                                </a>
+                                            </div>
+                                            <div class="nav-item">
+                                                <a class="nav-link btn btn-active-light-primary py-3 px-6" data-bs-toggle="tab" href="#kt_tab_backup">
+                                                    <span class="d-flex align-items-center">
+                                                        <i class="ki-outline ki-cloud-download fs-2 me-2"></i>
+                                                        Yedekleme
+                                                    </span>
+                                                </a>
+                                            </div>
+                                            <div class="nav-item">
+                                                <a class="nav-link btn btn-active-light-primary py-3 px-6" data-bs-toggle="tab" href="#kt_tab_appearance">
+                                                    <span class="d-flex align-items-center">
+                                                        <i class="ki-outline ki-color-palette fs-2 me-2"></i>
+                                                        Görünüm
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-xl-9">
+                            <div class="tab-content">
+                                <!-- Genel Ayarlar -->
+                                <div class="tab-pane fade show active" id="kt_tab_general">
+                                    <div class="card card-flush shadow-sm">
+                                        <div class="card-header">
+                                            <h3 class="card-title fw-bold text-gray-800">Genel Ayarlar</h3>
+                                        </div>
+                                        <div class="card-body py-5">
+                                            <form class="form">
+                                                <!-- İşletme Ayarları -->
+                                                <div class="mb-7">
+                                                    <h5 class="mb-5 fw-bold">İşletme Ayarları</h5>
+                                                    <div class="row mb-5">
+                                                        <label class="col-lg-4 col-form-label fw-semibold fs-6">Para Birimi</label>
+                                                        <div class="col-lg-8">
+                                                            <select class="form-select form-select-solid" data-control="select2" data-placeholder="Para Birimi Seçin">
+                                                                <option></option>
+                                                                <option value="TRY" selected>Türk Lirası (₺)</option>
+                                                                <option value="USD">Amerikan Doları ($)</option>
+                                                                <option value="EUR">Euro (€)</option>
+                                                                <option value="GBP">İngiliz Sterlini (£)</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-5">
+                                                        <label class="col-lg-4 col-form-label fw-semibold fs-6">Tarih Formatı</label>
+                                                        <div class="col-lg-8">
+                                                            <select class="form-select form-select-solid" data-control="select2" data-placeholder="Tarih Formatı Seçin">
+                                                                <option></option>
+                                                                <option value="dd/mm/yyyy" selected>GG/AA/YYYY</option>
+                                                                <option value="mm/dd/yyyy">AA/GG/YYYY</option>
+                                                                <option value="yyyy-mm-dd">YYYY-AA-GG</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-5">
+                                                        <label class="col-lg-4 col-form-label fw-semibold fs-6">Vergi Oranı (%)</label>
+                                                        <div class="col-lg-8">
+                                                            <input type="number" class="form-control form-control-solid" value="18" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Sistem Ayarları -->
+                                                <div class="mb-7">
+                                                    <h5 class="mb-5 fw-bold">Sistem Ayarları</h5>
+                                                    <div class="row mb-5">
+                                                        <label class="col-lg-4 col-form-label fw-semibold fs-6">Otomatik Yedekleme</label>
+                                                        <div class="col-lg-8 d-flex align-items-center">
+                                                            <div class="form-check form-check-solid form-check-custom form-switch form-switch-sm">
+                                                                <input class="form-check-input" type="checkbox" id="auto_backup" checked />
+                                                                <label class="form-check-label" for="auto_backup"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-5">
+                                                        <label class="col-lg-4 col-form-label fw-semibold fs-6">Düşük Stok Uyarı Seviyesi</label>
+                                                        <div class="col-lg-8">
+                                                            <input type="number" class="form-control form-control-solid" value="10" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-5">
+                                                        <label class="col-lg-4 col-form-label fw-semibold fs-6">Otomatik Çıkış Süresi (dk)</label>
+                                                        <div class="col-lg-8">
+                                                            <input type="number" class="form-control form-control-solid" value="30" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Kaydet Butonu -->
+                                                <div class="d-flex justify-content-end">
+                                                    <button type="reset" class="btn btn-light me-3">İptal</button>
+                                                    <button type="submit" class="btn btn-primary">Ayarları Kaydet</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Bildirim Ayarları -->
+                                <div class="tab-pane fade" id="kt_tab_notifications">
+                                    <div class="card card-flush shadow-sm">
+                                        <div class="card-header">
+                                            <h3 class="card-title fw-bold text-gray-800">Bildirim Ayarları</h3>
+                                        </div>
+                                        <div class="card-body py-5">
+                                            <form class="form">
+                                                <!-- E-posta Bildirimleri -->
+                                                <div class="mb-7">
+                                                    <h5 class="mb-5 fw-bold">E-posta Bildirimleri</h5>
+                                                    <div class="d-flex flex-column mb-5">
+                                                        <div class="form-check form-check-custom form-check-solid mb-3">
+                                                            <input class="form-check-input" type="checkbox" id="email_new_order" checked />
+                                                            <label class="form-check-label fw-semibold text-gray-700" for="email_new_order">
+                                                                Yeni sipariş bildirimlerini al
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-check-custom form-check-solid mb-3">
+                                                            <input class="form-check-input" type="checkbox" id="email_low_stock" checked />
+                                                            <label class="form-check-label fw-semibold text-gray-700" for="email_low_stock">
+                                                                Düşük stok uyarılarını al
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-check-custom form-check-solid mb-3">
+                                                            <input class="form-check-input" type="checkbox" id="email_appointment" checked />
+                                                            <label class="form-check-label fw-semibold text-gray-700" for="email_appointment">
+                                                                Randevu hatırlatmalarını al
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-check-custom form-check-solid mb-3">
+                                                            <input class="form-check-input" type="checkbox" id="email_payment" checked />
+                                                            <label class="form-check-label fw-semibold text-gray-700" for="email_payment">
+                                                                Ödeme bildirimlerini al
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Sistem Bildirimleri -->
+                                                <div class="mb-7">
+                                                    <h5 class="mb-5 fw-bold">Sistem Bildirimleri</h5>
+                                                    <div class="d-flex flex-column mb-5">
+                                                        <div class="form-check form-check-custom form-check-solid mb-3">
+                                                            <input class="form-check-input" type="checkbox" id="system_new_order" checked />
+                                                            <label class="form-check-label fw-semibold text-gray-700" for="system_new_order">
+                                                                Yeni sipariş bildirimleri
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-check-custom form-check-solid mb-3">
+                                                            <input class="form-check-input" type="checkbox" id="system_low_stock" checked />
+                                                            <label class="form-check-label fw-semibold text-gray-700" for="system_low_stock">
+                                                                Düşük stok uyarıları
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-check-custom form-check-solid mb-3">
+                                                            <input class="form-check-input" type="checkbox" id="system_appointment" checked />
+                                                            <label class="form-check-label fw-semibold text-gray-700" for="system_appointment">
+                                                                Randevu hatırlatmaları
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-check-custom form-check-solid mb-3">
+                                                            <input class="form-check-input" type="checkbox" id="system_payment" checked />
+                                                            <label class="form-check-label fw-semibold text-gray-700" for="system_payment">
+                                                                Ödeme bildirimleri
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Kaydet Butonu -->
+                                                <div class="d-flex justify-content-end">
+                                                    <button type="reset" class="btn btn-light me-3">İptal</button>
+                                                    <button type="submit" class="btn btn-primary">Ayarları Kaydet</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Kullanıcı Yönetimi -->
+                                <div class="tab-pane fade" id="kt_tab_users">
+                                    <div class="card card-flush shadow-sm">
+                                        <div class="card-header">
+                                            <h3 class="card-title fw-bold text-gray-800">Kullanıcı Yönetimi</h3>
+                                            <div class="card-toolbar">
+                                                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_user">
+                                                    <i class="ki-outline ki-plus fs-2"></i>Yeni Kullanıcı
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="card-body py-5">
+                                            <div class="table-responsive">
+                                                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                                    <thead>
+                                                        <tr class="fw-bold text-muted bg-light">
+                                                            <th class="ps-4 min-w-300px rounded-start">Kullanıcı</th>
+                                                            <th class="min-w-125px">Rol</th>
+                                                            <th class="min-w-125px">Son Giriş</th>
+                                                            <th class="min-w-100px">Durum</th>
+                                                            <th class="min-w-100px text-end rounded-end pe-4">İşlemler</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="d-flex align-items-center">
+                                                                    <div class="symbol symbol-45px me-5">
+                                                                        <img src="assets/media/avatars/300-1.jpg" alt="" />
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-start flex-column">
+                                                                        <span class="text-dark fw-bold text-hover-primary fs-6">Ali Yılmaz</span>
+                                                                        <span class="text-muted fw-semibold text-muted d-block fs-7">ali@ornek.com</span>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge badge-light-primary">Yönetici</span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="text-muted fw-semibold d-block fs-7">10 Temmuz 2025</span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge badge-light-success">Aktif</span>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                                                    <i class="ki-outline ki-pencil fs-2"></i>
+                                                                </a>
+                                                                <a href="#" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm">
+                                                                    <i class="ki-outline ki-trash fs-2"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="d-flex align-items-center">
+                                                                    <div class="symbol symbol-45px me-5">
+                                                                        <img src="assets/media/avatars/300-2.jpg" alt="" />
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-start flex-column">
+                                                                        <span class="text-dark fw-bold text-hover-primary fs-6">Ayşe Demir</span>
+                                                                        <span class="text-muted fw-semibold text-muted d-block fs-7">ayse@ornek.com</span>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge badge-light-warning">Kasiyer</span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="text-muted fw-semibold d-block fs-7">11 Temmuz 2025</span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge badge-light-success">Aktif</span>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                                                    <i class="ki-outline ki-pencil fs-2"></i>
+                                                                </a>
+                                                                <a href="#" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm">
+                                                                    <i class="ki-outline ki-trash fs-2"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Yedekleme -->
+                                <div class="tab-pane fade" id="kt_tab_backup">
+                                    <div class="card card-flush shadow-sm">
+                                        <div class="card-header">
+                                            <h3 class="card-title fw-bold text-gray-800">Yedekleme</h3>
+                                            <div class="card-toolbar">
+                                                <button type="button" class="btn btn-sm btn-primary">
+                                                    <i class="ki-outline ki-cloud-download fs-2"></i>Yedek Oluştur
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="card-body py-5">
+                                            <!-- Yedekleme Ayarları -->
+                                            <div class="mb-7">
+                                                <h5 class="mb-5 fw-bold">Yedekleme Ayarları</h5>
+                                                <div class="row mb-5">
+                                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">Otomatik Yedekleme</label>
+                                                    <div class="col-lg-8 d-flex align-items-center">
+                                                        <div class="form-check form-check-solid form-check-custom form-switch form-switch-sm">
+                                                            <input class="form-check-input" type="checkbox" id="backup_auto" checked />
+                                                            <label class="form-check-label" for="backup_auto"></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-5">
+                                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">Yedekleme Sıklığı</label>
+                                                    <div class="col-lg-8">
+                                                        <select class="form-select form-select-solid" data-control="select2" data-placeholder="Sıklık Seçin">
+                                                            <option></option>
+                                                            <option value="daily">Günlük</option>
+                                                            <option value="weekly" selected>Haftalık</option>
+                                                            <option value="monthly">Aylık</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-5">
+                                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">Maksimum Yedek Sayısı</label>
+                                                    <div class="col-lg-8">
+                                                        <input type="number" class="form-control form-control-solid" value="5" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Mevcut Yedekler -->
+                                            <div class="mb-7">
+                                                <h5 class="mb-5 fw-bold">Mevcut Yedekler</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                                        <thead>
+                                                            <tr class="fw-bold text-muted bg-light">
+                                                                <th class="ps-4 min-w-300px rounded-start">Yedek Adı</th>
+                                                                <th class="min-w-125px">Tarih</th>
+                                                                <th class="min-w-125px">Boyut</th>
+                                                                <th class="min-w-100px text-end rounded-end pe-4">İşlemler</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <span class="text-dark fw-bold text-hover-primary fs-6">yedek_12072025.zip</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="text-muted fw-semibold d-block fs-7">12 Temmuz 2025</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="text-muted fw-semibold d-block fs-7">2.5 MB</span>
+                                                                </td>
+                                                                <td class="text-end">
+                                                                    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                                                        <i class="ki-outline ki-cloud-download fs-2"></i>
+                                                                    </a>
+                                                                    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-success btn-sm me-1">
+                                                                        <i class="ki-outline ki-cloud-upload fs-2"></i>
+                                                                    </a>
+                                                                    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm">
+                                                                        <i class="ki-outline ki-trash fs-2"></i>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <span class="text-dark fw-bold text-hover-primary fs-6">yedek_05072025.zip</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="text-muted fw-semibold d-block fs-7">05 Temmuz 2025</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="text-muted fw-semibold d-block fs-7">2.3 MB</span>
+                                                                </td>
+                                                                <td class="text-end">
+                                                                    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                                                        <i class="ki-outline ki-cloud-download fs-2"></i>
+                                                                    </a>
+                                                                    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-success btn-sm me-1">
+                                                                        <i class="ki-outline ki-cloud-upload fs-2"></i>
+                                                                    </a>
+                                                                    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm">
+                                                                        <i class="ki-outline ki-trash fs-2"></i>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Kaydet Butonu -->
+                                            <div class="d-flex justify-content-end">
+                                                <button type="reset" class="btn btn-light me-3">İptal</button>
+                                                <button type="submit" class="btn btn-primary">Ayarları Kaydet</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Görünüm -->
+                                <div class="tab-pane fade" id="kt_tab_appearance">
+                                    <div class="card card-flush shadow-sm">
+                                        <div class="card-header">
+                                            <h3 class="card-title fw-bold text-gray-800">Görünüm Ayarları</h3>
+                                        </div>
+                                        <div class="card-body py-5">
+                                            <form class="form">
+                                                <!-- Tema Ayarları -->
+                                                <div class="mb-7">
+                                                    <h5 class="mb-5 fw-bold">Tema Ayarları</h5>
+                                                    <div class="row mb-5">
+                                                        <label class="col-lg-4 col-form-label fw-semibold fs-6">Tema Modu</label>
+                                                        <div class="col-lg-8">
+                                                            <div class="d-flex">
+                                                                <label class="form-check form-check-custom form-check-inline form-check-solid me-5">
+                                                                    <input class="form-check-input" name="theme_mode" type="radio" value="light" checked />
+                                                                    <span class="fw-semibold ps-2 fs-6">Açık</span>
+                                                                </label>
+                                                                <label class="form-check form-check-custom form-check-inline form-check-solid">
+                                                                    <input class="form-check-input" name="theme_mode" type="radio" value="dark" />
+                                                                    <span class="fw-semibold ps-2 fs-6">Koyu</span>
+                                                                </label>
+                                                                <label class="form-check form-check-custom form-check-inline form-check-solid ms-5">
+                                                                    <input class="form-check-input" name="theme_mode" type="radio" value="system" />
+                                                                    <span class="fw-semibold ps-2 fs-6">Sistem</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-5">
+                                                        <label class="col-lg-4 col-form-label fw-semibold fs-6">Ana Renk</label>
+                                                        <div class="col-lg-8">
+                                                            <div class="d-flex flex-wrap gap-5">
+                                                                <div class="form-check form-check-custom form-check-solid form-check-sm">
+                                                                    <input class="form-check-input border border-1 border-secondary" type="radio" name="theme_color" value="primary" checked 
+                                                                           style="background-color: #009ef7; width: 30px; height: 30px;" />
+                                                                </div>
+                                                                <div class="form-check form-check-custom form-check-solid form-check-sm">
+                                                                    <input class="form-check-input border border-1 border-secondary" type="radio" name="theme_color" value="success" 
+                                                                           style="background-color: #50cd89; width: 30px; height: 30px;" />
+                                                                </div>
+                                                                <div class="form-check form-check-custom form-check-solid form-check-sm">
+                                                                    <input class="form-check-input border border-1 border-secondary" type="radio" name="theme_color" value="danger" 
+                                                                           style="background-color: #f1416c; width: 30px; height: 30px;" />
+                                                                </div>
+                                                                <div class="form-check form-check-custom form-check-solid form-check-sm">
+                                                                    <input class="form-check-input border border-1 border-secondary" type="radio" name="theme_color" value="warning" 
+                                                                           style="background-color: #ffc700; width: 30px; height: 30px;" />
+                                                                </div>
+                                                                <div class="form-check form-check-custom form-check-solid form-check-sm">
+                                                                    <input class="form-check-input border border-1 border-secondary" type="radio" name="theme_color" value="info" 
+                                                                           style="background-color: #7239ea; width: 30px; height: 30px;" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Diğer Görünüm Ayarları -->
+                                                <div class="mb-7">
+                                                    <h5 class="mb-5 fw-bold">Sayfa Ayarları</h5>
+                                                    <div class="row mb-5">
+                                                        <label class="col-lg-4 col-form-label fw-semibold fs-6">Sayfa Başına Öğe Sayısı</label>
+                                                        <div class="col-lg-8">
+                                                            <select class="form-select form-select-solid" data-control="select2" data-placeholder="Sayı Seçin">
+                                                                <option></option>
+                                                                <option value="10">10</option>
+                                                                <option value="25" selected>25</option>
+                                                                <option value="50">50</option>
+                                                                <option value="100">100</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-5">
+                                                        <label class="col-lg-4 col-form-label fw-semibold fs-6">Dashboard Kartları</label>
+                                                        <div class="col-lg-8">
+                                                            <div class="d-flex flex-column">
+                                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                                    <input class="form-check-input" type="checkbox" id="show_customers" checked />
+                                                                    <label class="form-check-label fw-semibold text-gray-700" for="show_customers">
+                                                                        Müşteri Kartı
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                                    <input class="form-check-input" type="checkbox" id="show_products" checked />
+                                                                    <label class="form-check-label fw-semibold text-gray-700" for="show_products">
+                                                                        Ürün Kartı
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                                    <input class="form-check-input" type="checkbox" id="show_revenue" checked />
+                                                                    <label class="form-check-label fw-semibold text-gray-700" for="show_revenue">
+                                                                        Gelir Kartı
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                                    <input class="form-check-input" type="checkbox" id="show_orders" checked />
+                                                                    <label class="form-check-label fw-semibold text-gray-700" for="show_orders">
+                                                                        Sipariş Kartı
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Kaydet Butonu -->
+                                                <div class="d-flex justify-content-end">
+                                                    <button type="reset" class="btn btn-light me-3">İptal</button>
+                                                    <button type="submit" class="btn btn-primary">Ayarları Kaydet</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Kullanıcı Ekleme Modal -->
+                    <div class="modal fade" id="kt_modal_add_user" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered mw-650px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="fw-bold">Yeni Kullanıcı Ekle</h2>
+                                    <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                                        <i class="ki-outline ki-cross fs-1"></i>
+                                    </div>
+                                </div>
+                                <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
+                                    <form id="kt_modal_add_user_form" class="form">
+                                        <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_user_scroll">
+                                            <div class="fv-row mb-7">
+                                                <label class="required fw-semibold fs-6 mb-2">İsim Soyisim</label>
+                                                <input type="text" name="name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="İsim Soyisim" />
+                                            </div>
+                                            
+                                            <div class="fv-row mb-7">
+                                                <label class="required fw-semibold fs-6 mb-2">E-posta</label>
+                                                <input type="email" name="email" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="E-posta" />
+                                            </div>
+                                            
+                                            <div class="fv-row mb-7">
+                                                <label class="required fw-semibold fs-6 mb-2">Şifre</label>
+                                                <input type="password" name="password" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Şifre" />
+                                            </div>
+                                            
+                                            <div class="fv-row mb-7">
+                                                <label class="required fw-semibold fs-6 mb-2">Rol</label>
+                                                <select name="role" class="form-select form-select-solid" data-control="select2" data-placeholder="Rol Seçin">
+                                                    <option></option>
+                                                    <option value="admin">Yönetici</option>
+                                                    <option value="cashier">Kasiyer</option>
+                                                    <option value="staff">Çalışan</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="text-center pt-15">
+                                            <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal">İptal</button>
+                                            <button type="submit" id="kt_modal_add_user_submit" class="btn btn-primary">
+                                                <span class="indicator-label">Kullanıcı Ekle</span>
+                                                <span class="indicator-progress">Lütfen bekleyin...
+                                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="assets/plugins/global/plugins.bundle.js"></script>
+<script src="assets/js/scripts.bundle.js"></script>
+<script src="assets/js/widgets.bundle.js"></script>
+<script src="assets/js/custom/widgets.js"></script>
+<script>
+    // Sidebar toggle işlemleri
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sidebar toggle butonları
+        const sidebarToggleBtn = document.getElementById('kt_app_sidebar_toggle');
+        const sidebarToggleMobileBtn = document.getElementById('kt_app_sidebar_toggle_mobile');
+        const appBody = document.getElementById('kt_app_body');
+
+        // Sidebar toggle fonksiyonu
+        function toggleSidebar() {
+            if (appBody.classList.contains('app-sidebar-open')) {
+                appBody.classList.remove('app-sidebar-open');
+            } else {
+                appBody.classList.add('app-sidebar-open');
+            }
+        }
+
+        // Event listener'ları ekle
+        if (sidebarToggleBtn) {
+            sidebarToggleBtn.addEventListener('click', toggleSidebar);
+        }
+        
+        if (sidebarToggleMobileBtn) {
+            sidebarToggleMobileBtn.addEventListener('click', toggleSidebar);
+        }
+
+        // Dışarı tıklandığında sidebar'ı kapat (sadece mobil görünümde)
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('kt_app_sidebar');
+            const isMobile = window.innerWidth < 992;
+            
+            if (isMobile && appBody.classList.contains('app-sidebar-open') && 
+                sidebar && !sidebar.contains(e.target) && 
+                sidebarToggleBtn && !sidebarToggleBtn.contains(e.target)) {
+                appBody.classList.remove('app-sidebar-open');
+            }
+        });
+
+        // Sayfa yüklendiğinde aktif menü öğesini vurgula
+        const activeMenuLink = document.querySelector('.menu-link.active');
+        if (activeMenuLink) {
+            activeMenuLink.scrollIntoView({ block: 'center' });
+        }
+    });
+</script>
+
+</body>
+</html>
