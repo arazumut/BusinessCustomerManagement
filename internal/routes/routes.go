@@ -15,9 +15,11 @@ func Setup(r *gin.Engine, h *handlers.Handler) {
 
 	// Ürünler
 	r.GET("/products", h.Products)
+	r.GET("/products/detail/:id", h.ProductDetail)
 
 	// Siparişler
 	r.GET("/orders", h.Orders)
+	r.GET("/orders/detail/:id", h.OrderDetail)
 
 	// Muhasebe
 	r.GET("/accounting", h.Accounting)
@@ -36,6 +38,7 @@ func Setup(r *gin.Engine, h *handlers.Handler) {
 
 	// Profil Sayfası
 	r.GET("/profile", h.Profile)
+	r.POST("/profile", h.UpdateProfile)
 
 	// Ayarlar Sayfası
 	r.GET("/settings", h.Settings)

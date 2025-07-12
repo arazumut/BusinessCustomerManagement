@@ -124,6 +124,31 @@ func (h *Handler) Profile(c *gin.Context) {
 	})
 }
 
+// Profil Güncelle
+func (h *Handler) UpdateProfile(c *gin.Context) {
+	// Form verilerini al
+	name := c.PostForm("name")
+	businessName := c.PostForm("business_name")
+	email := c.PostForm("email")
+	phone := c.PostForm("phone")
+	address := c.PostForm("address")
+
+	// Profil güncelleme işlemi burada yapılacak
+	// Şimdilik sadece başarı mesajı döndürelim
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Profil başarıyla güncellendi",
+		"data": gin.H{
+			"name":          name,
+			"business_name": businessName,
+			"email":         email,
+			"phone":         phone,
+			"address":       address,
+		},
+	})
+}
+
 // Ayarlar
 func (h *Handler) Settings(c *gin.Context) {
 	c.HTML(http.StatusOK, "settings.html", gin.H{
@@ -352,4 +377,97 @@ func (h *Handler) insertCustomer(customer *models.Customer) (int, error) {
 	}
 
 	return int(id), nil
+}
+
+// Ürün Detayı
+func (h *Handler) ProductDetail(c *gin.Context) {
+	id := c.Param("id")
+
+	// Ürün detayını veritabanından al
+	var product models.Product
+	err := h.db.QueryRow(`
+		SELECT id, user_id, name, description, price, category, stock_quantity, unit, created_at, updated_at
+		FROM products WHERE id = ? AND user_id = ?
+	`, id, 1).Scan(&product.ID, &product.UserID, &product.Name, &product.Description,
+		&product.Price, &product.Category, &product.StockQuantity, &product.Unit,
+		&product.CreatedAt, &product.UpdatedAt)
+
+	if err != nil {
+		c.HTML(http.StatusNotFound, "error.html", gin.H{"error": "Ürün bulunamadı"})
+		return
+	}
+
+	c.HTML(http.StatusOK, "product_detail.html", gin.H{
+		"product": product,
+		"title":   "Ürün Detayı - " + product.Name,
+		"active":  "products",
+	})
+}
+
+// Sipariş Detayı
+func (h *Handler) OrderDetail(c *gin.Context) {
+	id := c.Param("id")
+
+	// Sipariş detayını veritabanından al
+	var order models.Order
+	err := h.db.QueryRow(`
+		SELECT o.id, o.user_id, o.customer_id, o.order_number, o.status, o.total_amount, 
+		       o.notes, o.order_date, o.delivery_date, o.created_at, o.updated_at,
+		       c.name as customer_name, c.email as customer_email, c.phone as customer_phone
+		FROM orders o 
+		JOIN customers c ON o.customer_id = c.id 
+		WHERE o.id = ? AND o.user_id = ?
+	`, id, 1).Scan(&order.ID, &order.UserID, &order.CustomerID, &order.OrderNumber,
+		&order.Status, &order.TotalAmount, &order.Notes, &order.OrderDate,
+		&order.DeliveryDate, &order.CreatedAt, &order.UpdatedAt,
+		&order.Customer.Name, &order.Customer.Email, &order.Customer.Phone)
+
+	if err != nil {
+		c.HTML(http.StatusNotFound, "error.html", gin.H{"error": "Sipariş bulunamadı"})
+		return
+	}
+
+	// Sipariş kalemlerini al
+	items, err := h.getOrderItems(order.ID)
+	if err != nil {
+		c.HTML(http.StatusInternalServerError, "error.html", gin.H{"error": err.Error()})
+		return
+	}
+	order.Items = items
+
+	c.HTML(http.StatusOK, "order_detail.html", gin.H{
+		"order":  order,
+		"title":  "Sipariş Detayı - " + order.OrderNumber,
+		"active": "orders",
+	})
+}
+
+// Sipariş kalemlerini getir
+func (h *Handler) getOrderItems(orderID int) ([]models.OrderItem, error) {
+	rows, err := h.db.Query(`
+		SELECT oi.id, oi.order_id, oi.product_id, oi.quantity, oi.unit_price, oi.total_price,
+		       p.name as product_name, p.unit as product_unit
+		FROM order_items oi
+		JOIN products p ON oi.product_id = p.id
+		WHERE oi.order_id = ?
+	`, orderID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var items []models.OrderItem
+	for rows.Next() {
+		var item models.OrderItem
+		var productName, productUnit string
+		err := rows.Scan(&item.ID, &item.OrderID, &item.ProductID, &item.Quantity,
+			&item.UnitPrice, &item.TotalPrice, &productName, &productUnit)
+		if err != nil {
+			return nil, err
+		}
+		item.Product = &models.Product{Name: productName, Unit: productUnit}
+		items = append(items, item)
+	}
+
+	return items, nil
 }

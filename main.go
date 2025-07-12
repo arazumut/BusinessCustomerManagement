@@ -34,6 +34,12 @@ func main() {
 	// Şablon fonksiyonlarını tanımla
 	r.SetFuncMap(template.FuncMap{
 		"now": time.Now,
+		"mul": func(a, b float64) float64 {
+			return a * b
+		},
+		"float64": func(i int) float64 {
+			return float64(i)
+		},
 	})
 
 	r.LoadHTMLGlob("templates/*")

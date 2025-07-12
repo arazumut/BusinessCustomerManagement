@@ -322,12 +322,12 @@
                                             <a href="/products/detail/{{.ID}}" class="text-gray-900 text-hover-primary mb-1">{{.Name}}</a>
                                         </td>
                                         <td>{{.Category}}</td>
-                                        <td>{{.Stock}} {{.Unit}}</td>
+                                        <td>{{.StockQuantity}} {{.Unit}}</td>
                                         <td>{{printf "%.2f" .Price}} ₺</td>
                                         <td>
-                                            {{if ge .Stock .AlertThreshold}}
+                                            {{if ge .StockQuantity 10}}
                                             <div class="badge badge-light-success">Stokta</div>
-                                            {{else if gt .Stock 0}}
+                                            {{else if gt .StockQuantity 0}}
                                             <div class="badge badge-light-warning">Kritik</div>
                                             {{else}}
                                             <div class="badge badge-light-danger">Tükendi</div>
