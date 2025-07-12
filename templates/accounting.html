@@ -255,15 +255,17 @@
                                  style="background-color: #7239EA;background-image:url('assets/media/patterns/vector-1.png')">
                                 <div class="card-header pt-5">
                                     <div class="card-title d-flex flex-column">
-                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{printf "%.2f" .summary.MonthlyIncome}} ₺</span>
+                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">
+                                            {{if .summary.MonthlyIncome}}{{printf "%.2f" .summary.MonthlyIncome}}{{else}}0.00{{end}} ₺
+                                        </span>
                                         <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Aylık Gelir</span>
                                     </div>
                                 </div>
                                 <div class="card-body d-flex align-items-end pt-0">
                                     <div class="d-flex align-items-center flex-column mt-3 w-100">
                                         <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                            <span>{{.summary.MonthlyIncomeChange}}% artış</span>
-                                            <span>{{.today.Format "Ocak 2006"}}</span>
+                                            <span>{{if .summary.MonthlyIncomeChange}}{{.summary.MonthlyIncomeChange}}{{else}}0{{end}}% artış</span>
+                                            <span>{{.today.Format "January 2006"}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -276,15 +278,17 @@
                                  style="background-color: #F1416C;background-image:url('assets/media/patterns/vector-1.png')">
                                 <div class="card-header pt-5">
                                     <div class="card-title d-flex flex-column">
-                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{printf "%.2f" .summary.MonthlyExpense}} ₺</span>
+                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">
+                                            {{if .summary.MonthlyExpense}}{{printf "%.2f" .summary.MonthlyExpense}}{{else}}0.00{{end}} ₺
+                                        </span>
                                         <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Aylık Gider</span>
                                     </div>
                                 </div>
                                 <div class="card-body d-flex align-items-end pt-0">
                                     <div class="d-flex align-items-center flex-column mt-3 w-100">
                                         <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                            <span>{{.summary.MonthlyExpenseChange}}% artış</span>
-                                            <span>{{.today.Format "Ocak 2006"}}</span>
+                                            <span>{{if .summary.MonthlyExpenseChange}}{{.summary.MonthlyExpenseChange}}{{else}}0{{end}}% artış</span>
+                                            <span>{{.today.Format "January 2006"}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -297,15 +301,17 @@
                                  style="background-color: #50CD89;background-image:url('assets/media/patterns/vector-1.png')">
                                 <div class="card-header pt-5">
                                     <div class="card-title d-flex flex-column">
-                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{printf "%.2f" .summary.MonthlyProfit}} ₺</span>
+                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">
+                                            {{if .summary.MonthlyProfit}}{{printf "%.2f" .summary.MonthlyProfit}}{{else}}0.00{{end}} ₺
+                                        </span>
                                         <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Aylık Kar</span>
                                     </div>
                                 </div>
                                 <div class="card-body d-flex align-items-end pt-0">
                                     <div class="d-flex align-items-center flex-column mt-3 w-100">
                                         <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                            <span>{{.summary.MonthlyProfitChange}}% artış</span>
-                                            <span>{{.today.Format "Ocak 2006"}}</span>
+                                            <span>{{if .summary.MonthlyProfitChange}}{{.summary.MonthlyProfitChange}}{{else}}0{{end}}% artış</span>
+                                            <span>{{.today.Format "January 2006"}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -318,14 +324,16 @@
                                  style="background-color: #FFC700;background-image:url('assets/media/patterns/vector-1.png')">
                                 <div class="card-header pt-5">
                                     <div class="card-title d-flex flex-column">
-                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{printf "%.2f" .summary.PendingPayments}} ₺</span>
+                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">
+                                            {{if .summary.PendingPayments}}{{printf "%.2f" .summary.PendingPayments}}{{else}}0.00{{end}} ₺
+                                        </span>
                                         <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Bekleyen Ödemeler</span>
                                     </div>
                                 </div>
                                 <div class="card-body d-flex align-items-end pt-0">
                                     <div class="d-flex align-items-center flex-column mt-3 w-100">
                                         <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                            <span>{{.summary.PendingPaymentsCount}} ödeme</span>
+                                            <span>{{if .summary.PendingPaymentsCount}}{{.summary.PendingPaymentsCount}}{{else}}0{{end}} ödeme</span>
                                             <span>{{.today.Format "02.01.2006"}}</span>
                                         </div>
                                     </div>
