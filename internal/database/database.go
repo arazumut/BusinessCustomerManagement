@@ -73,6 +73,8 @@ func (db *DB) createTables() error {
 		category TEXT,
 		stock_quantity INTEGER DEFAULT 0,
 		unit TEXT DEFAULT 'adet',
+		barcode TEXT,
+		min_stock_level INTEGER DEFAULT 5,
 		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		FOREIGN KEY (user_id) REFERENCES users(id)
@@ -123,6 +125,22 @@ func (db *DB) createTables() error {
 		FOREIGN KEY (user_id) REFERENCES users(id)
 	);`
 
+	// Stok hareketleri tablosu
+	stockMovementsTable := `
+	CREATE TABLE IF NOT EXISTS stock_movements (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		user_id INTEGER NOT NULL,
+		product_id INTEGER NOT NULL,
+		type TEXT NOT NULL CHECK (type IN ('in', 'out', 'adjustment')),
+		quantity INTEGER NOT NULL,
+		reference TEXT,
+		description TEXT,
+		movement_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		FOREIGN KEY (user_id) REFERENCES users(id),
+		FOREIGN KEY (product_id) REFERENCES products(id)
+	);`
+
 	tables := []string{
 		usersTable,
 		customersTable,
@@ -130,6 +148,7 @@ func (db *DB) createTables() error {
 		ordersTable,
 		orderItemsTable,
 		transactionsTable,
+		stockMovementsTable,
 	}
 
 	for _, table := range tables {

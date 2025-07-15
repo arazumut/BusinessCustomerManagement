@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"database/sql"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -470,4 +472,237 @@ func (h *Handler) getOrderItems(orderID int) ([]models.OrderItem, error) {
 	}
 
 	return items, nil
+}
+
+// Stok Yönetimi
+func (h *Handler) StockManagement(c *gin.Context) {
+	products, err := h.getProducts()
+	if err != nil {
+		c.HTML(http.StatusInternalServerError, "error.html", gin.H{"error": err.Error()})
+		return
+	}
+
+	// Düşük stoklu ürünleri bul
+	var lowStockProducts []models.Product
+	for _, p := range products {
+		if p.StockQuantity <= p.MinStockLevel {
+			lowStockProducts = append(lowStockProducts, p)
+		}
+	}
+
+	c.HTML(http.StatusOK, "stock_management.html", gin.H{
+		"products":         products,
+		"lowStockProducts": lowStockProducts,
+		"title":            "Stok Yönetimi - Esnaf Yönetim Sistemi",
+		"active":           "stock",
+	})
+}
+
+// Stok Hareketleri
+func (h *Handler) StockMovements(c *gin.Context) {
+	movements, err := h.getStockMovements()
+	if err != nil {
+		c.HTML(http.StatusInternalServerError, "error.html", gin.H{"error": err.Error()})
+		return
+	}
+
+	c.HTML(http.StatusOK, "stock_movements.html", gin.H{
+		"movements": movements,
+		"title":     "Stok Hareketleri - Esnaf Yönetim Sistemi",
+		"active":    "stock_movements",
+	})
+}
+
+// Barkod Tarama
+func (h *Handler) BarcodeScanner(c *gin.Context) {
+	c.HTML(http.StatusOK, "barcode_scanner.html", gin.H{
+		"title":  "Barkod Tarama - Esnaf Yönetim Sistemi",
+		"active": "barcode_scanner",
+	})
+}
+
+// API: Stok Hareketi Ekle
+func (h *Handler) AddStockMovementAPI(c *gin.Context) {
+	var movement models.StockMovement
+	if err := c.ShouldBindJSON(&movement); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Kullanıcı ID'sini ayarla (gerçek uygulamada oturum bilgisinden alınır)
+	movement.UserID = 1
+	movement.MovementDate = time.Now()
+
+	// Stok hareketini kaydet
+	id, err := h.insertStockMovement(&movement)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Ürünün stok miktarını güncelle
+	if err := h.updateProductStock(movement.ProductID, movement.Type, movement.Quantity); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	movement.ID = id
+	c.JSON(http.StatusCreated, movement)
+}
+
+// API: Barkod ile Ürün Ara
+func (h *Handler) GetProductByBarcodeAPI(c *gin.Context) {
+	barcode := c.Query("barcode")
+	if barcode == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Barkod parametresi gerekli"})
+		return
+	}
+
+	product, err := h.getProductByBarcode(barcode)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	if product == nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Ürün bulunamadı"})
+		return
+	}
+
+	c.JSON(http.StatusOK, product)
+}
+
+// API: Düşük Stoklu Ürünleri Getir
+func (h *Handler) GetLowStockProductsAPI(c *gin.Context) {
+	products, err := h.getLowStockProducts()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, products)
+}
+
+// Stok hareketlerini getir
+func (h *Handler) getStockMovements() ([]models.StockMovement, error) {
+	rows, err := h.db.Query(`
+		SELECT sm.id, sm.user_id, sm.product_id, sm.type, sm.quantity, 
+		       sm.reference, sm.description, sm.movement_date, sm.created_at,
+		       p.name as product_name
+		FROM stock_movements sm
+		JOIN products p ON sm.product_id = p.id
+		WHERE sm.user_id = ?
+		ORDER BY sm.movement_date DESC
+	`, 1)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var movements []models.StockMovement
+	for rows.Next() {
+		var m models.StockMovement
+		var productName string
+		err := rows.Scan(
+			&m.ID, &m.UserID, &m.ProductID, &m.Type, &m.Quantity,
+			&m.Reference, &m.Description, &m.MovementDate, &m.CreatedAt,
+			&productName,
+		)
+		if err != nil {
+			return nil, err
+		}
+		m.Product = &models.Product{ID: m.ProductID, Name: productName}
+		movements = append(movements, m)
+	}
+
+	return movements, nil
+}
+
+// Stok hareketi ekle
+func (h *Handler) insertStockMovement(movement *models.StockMovement) (int, error) {
+	result, err := h.db.Exec(`
+		INSERT INTO stock_movements (user_id, product_id, type, quantity, reference, description, movement_date)
+		VALUES (?, ?, ?, ?, ?, ?, ?)
+	`, movement.UserID, movement.ProductID, movement.Type, movement.Quantity, movement.Reference, movement.Description, movement.MovementDate)
+	if err != nil {
+		return 0, err
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+
+	return int(id), nil
+}
+
+// Ürün stok miktarını güncelle
+func (h *Handler) updateProductStock(productID int, movementType string, quantity int) error {
+	var updateQuery string
+
+	switch movementType {
+	case "in":
+		updateQuery = "UPDATE products SET stock_quantity = stock_quantity + ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?"
+	case "out":
+		updateQuery = "UPDATE products SET stock_quantity = stock_quantity - ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?"
+	case "adjustment":
+		updateQuery = "UPDATE products SET stock_quantity = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?"
+	default:
+		return fmt.Errorf("geçersiz hareket tipi: %s", movementType)
+	}
+
+	_, err := h.db.Exec(updateQuery, quantity, productID)
+	return err
+}
+
+// Barkod ile ürün ara
+func (h *Handler) getProductByBarcode(barcode string) (*models.Product, error) {
+	var product models.Product
+	err := h.db.QueryRow(`
+		SELECT id, user_id, name, description, price, category, stock_quantity, unit, barcode, min_stock_level, created_at, updated_at
+		FROM products
+		WHERE barcode = ? AND user_id = ?
+	`, barcode, 1).Scan(
+		&product.ID, &product.UserID, &product.Name, &product.Description, &product.Price,
+		&product.Category, &product.StockQuantity, &product.Unit, &product.Barcode, &product.MinStockLevel,
+		&product.CreatedAt, &product.UpdatedAt,
+	)
+
+	if err == sql.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
+		return nil, err
+	}
+
+	return &product, nil
+}
+
+// Düşük stoklu ürünleri getir
+func (h *Handler) getLowStockProducts() ([]models.Product, error) {
+	rows, err := h.db.Query(`
+		SELECT id, user_id, name, description, price, category, stock_quantity, unit, barcode, min_stock_level, created_at, updated_at
+		FROM products
+		WHERE user_id = ? AND stock_quantity <= min_stock_level
+		ORDER BY stock_quantity ASC
+	`, 1)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var products []models.Product
+	for rows.Next() {
+		var p models.Product
+		err := rows.Scan(
+			&p.ID, &p.UserID, &p.Name, &p.Description, &p.Price,
+			&p.Category, &p.StockQuantity, &p.Unit, &p.Barcode, &p.MinStockLevel,
+			&p.CreatedAt, &p.UpdatedAt,
+		)
+		if err != nil {
+			return nil, err
+		}
+		products = append(products, p)
+	}
+
+	return products, nil
 }

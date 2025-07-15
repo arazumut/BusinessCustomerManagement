@@ -21,6 +21,11 @@ func Setup(r *gin.Engine, h *handlers.Handler) {
 	r.GET("/orders", h.Orders)
 	r.GET("/orders/detail/:id", h.OrderDetail)
 
+	// Stok Yönetimi
+	r.GET("/stock", h.StockManagement)
+	r.GET("/stock/movements", h.StockMovements)
+	r.GET("/stock/barcode", h.BarcodeScanner)
+
 	// Muhasebe
 	r.GET("/accounting", h.Accounting)
 
@@ -61,5 +66,10 @@ func Setup(r *gin.Engine, h *handlers.Handler) {
 		// Muhasebe API'leri
 		// api.GET("/transactions", h.GetTransactionsAPI)
 		// api.POST("/transactions", h.CreateTransaction)
+
+		// Stok Yönetimi API'leri
+		api.POST("/stock/movements", h.AddStockMovementAPI)
+		api.GET("/stock/products/barcode", h.GetProductByBarcodeAPI)
+		api.GET("/stock/products/low", h.GetLowStockProductsAPI)
 	}
 }

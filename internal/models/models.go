@@ -36,6 +36,8 @@ type Product struct {
 	Category      string    `json:"category" db:"category"`
 	StockQuantity int       `json:"stock_quantity" db:"stock_quantity"`
 	Unit          string    `json:"unit" db:"unit"`
+	Barcode       string    `json:"barcode" db:"barcode"`
+	MinStockLevel int       `json:"min_stock_level" db:"min_stock_level"`
 	CreatedAt     time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt     time.Time `json:"updated_at" db:"updated_at"`
 }
@@ -75,6 +77,20 @@ type Transaction struct {
 	Description     string    `json:"description" db:"description"`
 	TransactionDate time.Time `json:"transaction_date" db:"transaction_date"`
 	CreatedAt       time.Time `json:"created_at" db:"created_at"`
+}
+
+// Stok Hareketleri için model
+type StockMovement struct {
+	ID           int       `json:"id" db:"id"`
+	UserID       int       `json:"user_id" db:"user_id"`
+	ProductID    int       `json:"product_id" db:"product_id"`
+	Type         string    `json:"type" db:"type"` // in, out, adjustment
+	Quantity     int       `json:"quantity" db:"quantity"`
+	Reference    string    `json:"reference" db:"reference"` // Sipariş no, fatura no, vb.
+	Description  string    `json:"description" db:"description"`
+	MovementDate time.Time `json:"movement_date" db:"movement_date"`
+	CreatedAt    time.Time `json:"created_at" db:"created_at"`
+	Product      *Product  `json:"product,omitempty"`
 }
 
 // Dashboard için özet veriler
