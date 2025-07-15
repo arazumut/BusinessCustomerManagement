@@ -291,7 +291,12 @@ func (h *Handler) getCustomers() ([]models.Customer, error) {
 }
 
 func (h *Handler) getProducts() ([]models.Product, error) {
-	rows, err := h.db.Query("SELECT * FROM products WHERE user_id = ? ORDER BY created_at DESC", 1)
+	rows, err := h.db.Query(`
+		SELECT id, user_id, name, description, price, category, stock_quantity, unit, barcode, min_stock_level, created_at, updated_at
+		FROM products
+		WHERE user_id = ?
+		ORDER BY name ASC
+	`, 1)
 	if err != nil {
 		return nil, err
 	}
@@ -299,14 +304,16 @@ func (h *Handler) getProducts() ([]models.Product, error) {
 
 	var products []models.Product
 	for rows.Next() {
-		var product models.Product
-		err := rows.Scan(&product.ID, &product.UserID, &product.Name, &product.Description,
-			&product.Price, &product.Category, &product.StockQuantity, &product.Unit,
-			&product.CreatedAt, &product.UpdatedAt)
+		var p models.Product
+		err := rows.Scan(
+			&p.ID, &p.UserID, &p.Name, &p.Description, &p.Price,
+			&p.Category, &p.StockQuantity, &p.Unit, &p.Barcode, &p.MinStockLevel,
+			&p.CreatedAt, &p.UpdatedAt,
+		)
 		if err != nil {
 			return nil, err
 		}
-		products = append(products, product)
+		products = append(products, p)
 	}
 
 	return products, nil
@@ -388,10 +395,10 @@ func (h *Handler) ProductDetail(c *gin.Context) {
 	// Ürün detayını veritabanından al
 	var product models.Product
 	err := h.db.QueryRow(`
-		SELECT id, user_id, name, description, price, category, stock_quantity, unit, created_at, updated_at
+		SELECT id, user_id, name, description, price, category, stock_quantity, unit, barcode, min_stock_level, created_at, updated_at
 		FROM products WHERE id = ? AND user_id = ?
 	`, id, 1).Scan(&product.ID, &product.UserID, &product.Name, &product.Description,
-		&product.Price, &product.Category, &product.StockQuantity, &product.Unit,
+		&product.Price, &product.Category, &product.StockQuantity, &product.Unit, &product.Barcode, &product.MinStockLevel,
 		&product.CreatedAt, &product.UpdatedAt)
 
 	if err != nil {
