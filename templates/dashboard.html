@@ -236,186 +236,105 @@
             <div id="kt_app_content" class="app-content flex-column-fluid">
                 <div id="kt_app_content_container" class="app-container container-fluid">
                     
-                    <!-- İstatistik Kartları -->
-                    <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
-                        
-                        <!-- Toplam Müşteriler -->
-                        <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-0">
-                            <div class="card card-flush h-md-100 h-xl-100 shadow-sm">
-                                <div class="card-header pt-5">
-                                    <div class="card-title d-flex flex-column">
-                                        <div class="d-flex align-items-center">
-                                            <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">Toplam</span>
-                                            <span class="fs-2hx fw-bold text-gray-800 me-2 lh-1 ls-n2">{{.stats.TotalCustomers}}</span>
-                                        </div>
-                                        <span class="text-gray-500 pt-1 fw-semibold fs-6">Müşteri</span>
+                    <!-- Dashboard İçeriği -->
+                    <div class="container py-5">
+                        <div class="row g-4 mb-5">
+                            <!-- İstatistik Kartları -->
+                            <div class="col-6 col-md-3">
+                                <div class="card shadow-sm text-center">
+                                    <div class="card-body">
+                                        <div class="fs-2 fw-bold">{{.stats.TotalCustomers}}</div>
+                                        <div class="text-muted">Müşteri</div>
                                     </div>
                                 </div>
-                                <div class="card-body d-flex align-items-end pt-0">
-                                    <div class="d-flex align-items-center flex-column mt-3 w-100">
-                                        <div class="d-flex justify-content-between fw-bold fs-6 text-gray-800 w-100 mt-auto mb-2">
-                                            <span>Bu Ay</span>
-                                            <span>+{{.stats.TotalCustomers}}</span>
-                                        </div>
-                                        <div class="h-8px mx-3 w-100 bg-light-success rounded">
-                                            <div class="bg-success rounded h-8px" role="progressbar" style="width: 50%"></div>
-                                        </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="card shadow-sm text-center">
+                                    <div class="card-body">
+                                        <div class="fs-2 fw-bold">{{.stats.TotalProducts}}</div>
+                                        <div class="text-muted">Ürün</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="card shadow-sm text-center">
+                                    <div class="card-body">
+                                        <div class="fs-2 fw-bold">{{.stats.TotalOrders}}</div>
+                                        <div class="text-muted">Sipariş</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="card shadow-sm text-center">
+                                    <div class="card-body">
+                                        <div class="fs-2 fw-bold">₺{{printf "%.2f" .stats.MonthlyRevenue}}</div>
+                                        <div class="text-muted">Aylık Gelir</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Toplam Ürünler -->
-                        <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-0">
-                            <div class="card card-flush h-md-100 h-xl-100 shadow-sm">
-                                <div class="card-header pt-5">
-                                    <div class="card-title d-flex flex-column">
-                                        <div class="d-flex align-items-center">
-                                            <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">Toplam</span>
-                                            <span class="fs-2hx fw-bold text-gray-800 me-2 lh-1 ls-n2">{{.stats.TotalProducts}}</span>
-                                        </div>
-                                        <span class="text-gray-500 pt-1 fw-semibold fs-6">Ürün/Hizmet</span>
+                        <div class="row g-4">
+                            <!-- Son Siparişler -->
+                            <div class="col-12 col-lg-8">
+                                <div class="card shadow-sm h-100">
+                                    <div class="card-header bg-light fw-bold">Son Siparişler</div>
+                                    <div class="card-body p-0">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Müşteri</th>
+                                                    <th>Tutar</th>
+                                                    <th>Tarih</th>
+                                                    <th>Durum</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{range .stats.RecentOrders}}
+                                                <tr>
+                                                    <td>{{.OrderNumber}}</td>
+                                                    <td>{{if .Customer}}{{.Customer.Name}}{{else}}-{{end}}</td>
+                                                    <td>₺{{printf "%.2f" .TotalAmount}}</td>
+                                                    <td>{{.OrderDate.Format "02.01.2006"}}</td>
+                                                    <td>{{.Status}}</td>
+                                                </tr>
+                                                {{else}}
+                                                <tr><td colspan="5" class="text-center text-muted">Kayıt yok</td></tr>
+                                                {{end}}
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
-                                <div class="card-body d-flex align-items-end pt-0">
-                                    <div class="d-flex align-items-center flex-column mt-3 w-100">
-                                        <div class="d-flex justify-content-between fw-bold fs-6 text-gray-800 w-100 mt-auto mb-2">
-                                            <span>Aktif</span>
-                                            <span>{{.stats.TotalProducts}}</span>
-                                        </div>
-                                        <div class="h-8px mx-3 w-100 bg-light-primary rounded">
-                                            <div class="bg-primary rounded h-8px" role="progressbar" style="width: 70%"></div>
-                                        </div>
+                            </div>
+                            <!-- Hızlı Aksiyonlar -->
+                            <div class="col-12 col-lg-4">
+                                <div class="card shadow-sm mb-4">
+                                    <div class="card-header bg-light fw-bold">Hızlı Aksiyonlar</div>
+                                    <div class="card-body d-grid gap-2">
+                                        <a href="/customers" class="btn btn-primary">Yeni Müşteri Ekle</a>
+                                        <a href="/orders" class="btn btn-success">Yeni Sipariş Oluştur</a>
+                                        <a href="/products" class="btn btn-warning">Ürün Listesi</a>
+                                        <a href="/accounting" class="btn btn-info">Muhasebe</a>
+                                    </div>
+                                </div>
+                                <div class="card shadow-sm">
+                                    <div class="card-header bg-light fw-bold">Azalan Stoklar</div>
+                                    <div class="card-body p-0">
+                                        <ul class="list-group list-group-flush">
+                                            {{range .stats.LowStockProducts}}
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                {{.Name}}
+                                                <span class="badge bg-danger">{{.StockQuantity}}</span>
+                                            </li>
+                                            {{else}}
+                                            <li class="list-group-item text-center text-muted">Sorunlu stok yok</li>
+                                            {{end}}
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Aylık Gelir -->
-                        <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-0">
-                            <div class="card card-flush h-md-100 h-xl-100 shadow-sm">
-                                <div class="card-header pt-5">
-                                    <div class="card-title d-flex flex-column">
-                                        <div class="d-flex align-items-center">
-                                            <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">₺</span>
-                                            <span class="fs-2hx fw-bold text-gray-800 me-2 lh-1 ls-n2">{{printf "%.2f" .stats.MonthlyRevenue}}</span>
-                                        </div>
-                                        <span class="text-gray-500 pt-1 fw-semibold fs-6">Aylık Gelir</span>
-                                    </div>
-                                </div>
-                                <div class="card-body d-flex align-items-end pt-0">
-                                    <div class="d-flex align-items-center flex-column mt-3 w-100">
-                                        <div class="d-flex justify-content-between fw-bold fs-6 text-gray-800 w-100 mt-auto mb-2">
-                                            <span>Bu Ay</span>
-                                            <span>+15%</span>
-                                        </div>
-                                        <div class="h-8px mx-3 w-100 bg-light-warning rounded">
-                                            <div class="bg-warning rounded h-8px" role="progressbar" style="width: 65%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Bekleyen Siparişler -->
-                        <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-0">
-                            <div class="card card-flush h-md-100 h-xl-100 shadow-sm">
-                                <div class="card-header pt-5">
-                                    <div class="card-title d-flex flex-column">
-                                        <div class="d-flex align-items-center">
-                                            <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">Bekleyen</span>
-                                            <span class="fs-2hx fw-bold text-gray-800 me-2 lh-1 ls-n2">{{.stats.PendingOrders}}</span>
-                                        </div>
-                                        <span class="text-gray-500 pt-1 fw-semibold fs-6">Sipariş</span>
-                                    </div>
-                                </div>
-                                <div class="card-body d-flex align-items-end pt-0">
-                                    <div class="d-flex align-items-center flex-column mt-3 w-100">
-                                        <div class="d-flex justify-content-between fw-bold fs-6 text-gray-800 w-100 mt-auto mb-2">
-                                            <span>Toplam</span>
-                                            <span>{{.stats.TotalOrders}}</span>
-                                        </div>
-                                        <div class="h-8px mx-3 w-100 bg-light-danger rounded">
-                                            <div class="bg-danger rounded h-8px" role="progressbar" style="width: 40%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Hızlı Erişim Kartları -->
-                    <div class="row g-5 g-xl-10">
-                        
-                        <!-- Yeni Müşteri Ekle -->
-                        <div class="col-xl-4 mb-xl-10">
-                            <div class="card card-flush h-xl-100 shadow-sm hover-elevate-up">
-                                <div class="card-header rounded bgi-no-repeat bgi-size-cover bgi-position-y-top bgi-position-x-center align-items-start h-250px" 
-                                     style="background-image:url('assets/media/svg/shapes/top-green.png')">
-                                    <h3 class="card-title align-items-start flex-column text-white pt-15">
-                                        <span class="fw-bold fs-2x mb-3">Yeni Müşteri</span>
-                                        <div class="fs-4 text-white">
-                                            <span class="opacity-75">Hızlı müşteri kaydı</span>
-                                        </div>
-                                    </h3>
-                                </div>
-                                <div class="card-body d-flex justify-content-between flex-column px-0 pb-0">
-                                    <div class="mb-7 px-9">
-                                        <div class="d-flex align-items-center mb-6">
-                                            <span class="me-2 text-gray-600 fs-6 fw-bold">Yeni müşteri eklemek için tıklayın</span>
-                                        </div>
-                                        <a href="/customers" class="btn btn-primary w-100 py-3">Müşteri Ekle</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Yeni Sipariş -->
-                        <div class="col-xl-4 mb-xl-10">
-                            <div class="card card-flush h-xl-100 shadow-sm hover-elevate-up">
-                                <div class="card-header rounded bgi-no-repeat bgi-size-cover bgi-position-y-top bgi-position-x-center align-items-start h-250px" 
-                                     style="background-image:url('assets/media/svg/shapes/top-blue.png')">
-                                    <h3 class="card-title align-items-start flex-column text-white pt-15">
-                                        <span class="fw-bold fs-2x mb-3">Yeni Sipariş</span>
-                                        <div class="fs-4 text-white">
-                                            <span class="opacity-75">Sipariş oluştur</span>
-                                        </div>
-                                    </h3>
-                                </div>
-                                <div class="card-body d-flex justify-content-between flex-column px-0 pb-0">
-                                    <div class="mb-7 px-9">
-                                        <div class="d-flex align-items-center mb-6">
-                                            <span class="me-2 text-gray-600 fs-6 fw-bold">Yeni sipariş oluşturmak için tıklayın</span>
-                                        </div>
-                                        <a href="/orders" class="btn btn-primary w-100 py-3">Sipariş Oluştur</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Raporlar -->
-                        <div class="col-xl-4 mb-xl-10">
-                            <div class="card card-flush h-xl-100 shadow-sm hover-elevate-up">
-                                <div class="card-header rounded bgi-no-repeat bgi-size-cover bgi-position-y-top bgi-position-x-center align-items-start h-250px" 
-                                     style="background-image:url('assets/media/svg/shapes/top-red.png')">
-                                    <h3 class="card-title align-items-start flex-column text-white pt-15">
-                                        <span class="fw-bold fs-2x mb-3">Raporlar</span>
-                                        <div class="fs-4 text-white">
-                                            <span class="opacity-75">Gelir-gider analizi</span>
-                                        </div>
-                                    </h3>
-                                </div>
-                                <div class="card-body d-flex justify-content-between flex-column px-0 pb-0">
-                                    <div class="mb-7 px-9">
-                                        <div class="d-flex align-items-center mb-6">
-                                            <span class="me-2 text-gray-600 fs-6 fw-bold">Muhasebe raporlarını görüntüle</span>
-                                        </div>
-                                        <a href="/reports" class="btn btn-primary w-100 py-3">Raporları Gör</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
 
                 </div>
