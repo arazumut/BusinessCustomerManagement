@@ -77,6 +77,12 @@
                             <img src="assets/media/avatars/300-2.jpg" alt="user" />
                         </div>
                     </div>
+                    <!-- Tema Butonu -->
+                    <div class="app-navbar-item ms-2 ms-lg-2">
+                        <button id="theme-toggle" class="btn btn-icon" title="Tema Değiştir">
+                            <span id="theme-icon" class="fs-2">🌙</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -393,6 +399,61 @@
         }
     });
 </script>
-
+<script>
+// Tema geçişi ve localStorage ile tercih kaydı
+function setTheme(dark) {
+    if (dark) {
+        document.body.classList.add('dark-mode');
+        localStorage.setItem('theme', 'dark');
+        document.getElementById('theme-icon').textContent = '☀️';
+    } else {
+        document.body.classList.remove('dark-mode');
+        localStorage.setItem('theme', 'light');
+        document.getElementById('theme-icon').textContent = '🌙';
+    }
+}
+// İlk yüklemede tema kontrolü
+(function() {
+    const theme = localStorage.getItem('theme');
+    setTheme(theme === 'dark');
+})();
+// Butona tıklama
+const themeBtn = document.getElementById('theme-toggle');
+themeBtn.addEventListener('click', function() {
+    const isDark = document.body.classList.contains('dark-mode');
+    setTheme(!isDark);
+});
+</script>
+<style>
+.dark-mode {
+    background: #18191a !important;
+    color: #e4e6eb !important;
+}
+.dark-mode .card {
+    background: #242526 !important;
+    color: #e4e6eb !important;
+    border-color: #333 !important;
+}
+.dark-mode .table {
+    color: #e4e6eb !important;
+}
+.dark-mode .list-group-item {
+    background: #242526 !important;
+    color: #e4e6eb !important;
+    border-color: #333 !important;
+}
+.dark-mode .btn {
+    border-color: #444 !important;
+}
+.dark-mode .bg-light, .dark-mode .card-header.bg-light {
+    background: #23272b !important;
+    color: #e4e6eb !important;
+}
+.dark-mode .form-control {
+    background: #23272b !important;
+    color: #e4e6eb !important;
+    border-color: #444 !important;
+}
+</style>
 </body>
 </html>
